@@ -44,11 +44,19 @@ telemetry_monitor = UsageMonitor()
 
 @app.route('/intro.txt', methods=['GET'])
 def get_intro_txt():
-    return send_from_directory(WORKSPACE_ROOT, 'intro.txt', mimetype='text/plain; charset=utf-8')
+    for base in [WORKSPACE_ROOT, os.path.dirname(__file__), os.getcwd()]:
+        file_path = os.path.join(base, 'intro.txt')
+        if os.path.exists(file_path):
+            return send_from_directory(base, 'intro.txt', mimetype='text/plain; charset=utf-8')
+    return Response("WELCOME TO LEIBNITZ 6.0\nRefer to https://github.com/achawla4/leibnitz6/blob/main/intro.txt", mimetype='text/plain; charset=utf-8')
 
 @app.route('/install.py', methods=['GET'])
 def get_install_py():
-    return send_from_directory(WORKSPACE_ROOT, 'install.py', mimetype='text/x-python; charset=utf-8')
+    for base in [WORKSPACE_ROOT, os.path.dirname(__file__), os.getcwd()]:
+        file_path = os.path.join(base, 'install.py')
+        if os.path.exists(file_path):
+            return send_from_directory(base, 'install.py', mimetype='text/x-python; charset=utf-8')
+    return Response("# Leibnitz6 Remote Installer\n", mimetype='text/x-python; charset=utf-8')
 
 @app.route('/health', methods=['GET'])
 def health():
