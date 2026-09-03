@@ -41,7 +41,59 @@ Leibnitz 6.0 operates on a Zero-Server Cloud Architecture:
   directly to the cloud engine.
 
 -------------------------------------------------------------------------------
-3. THREE WAYS TO INTERACT WITH LEIBNITZ
+3. THREE WORKED EXAMPLES & USE CASES
+-------------------------------------------------------------------------------
+
+USE CASE 1: Audio Frequency Spectral Analysis (Devanagari Suganita Script)
+--------------------------------------------------------------------------
+Scenario: You want to analyze an incoming audio wave signal and visualize its 
+spectral frequency peaks using Fast Fourier Transformation (FFT).
+
+Suganita Script (`audio_fft.su`):
+  प्रवेश "audio_sample.wav"
+  लिखो "Initiating Nyaya Spectral Analysis..."
+  रूपरेखा "Audio Frequency Spectrum (FFT)"
+  रुको 100
+  लिखo "Spectral Plot Rendered Successfully."
+  निरोध
+
+How to Run: Open Structured Notepad v4 or Terminal REPL and execute the script.
+
+
+USE CASE 2: Real-Time Sensor Telemetry Streaming (Sahai Anytime Protocol)
+-------------------------------------------------------------------------
+Scenario: An edge device or vehicle sensor needs instant approximate calculations 
+that continuously refine into exact values without blocking execution.
+
+Python Code using Leibnitz 6 SDK (`sensor_stream.py`):
+  from leibnitz6_sdk import Leibnitz6Client
+
+  client = Leibnitz6Client()
+  signal_data = [0.1, 0.4, 0.9, 1.2, 0.8, 0.3, -0.2]
+
+  # Stream progressive Sahai refinement layers
+  for layer in client.stream_sahai(signal_data, layers=3):
+      print(f"Layer {layer['layer']} Quality {layer['quality_percent']}%: {layer['coefficients']}")
+
+
+USE CASE 3: Autonomous AI Agent Task Automation (Anthropic MCP Protocol)
+------------------------------------------------------------------------
+Scenario: An external AI agent (like Claude or an MCP client) autonomously invokes 
+Leibnitz 6 to execute signal processing tools.
+
+MCP JSON-RPC Request (`/api/mcp/v1/rpc`):
+  {
+    "jsonrpc": "2.0",
+    "method": "tools/call",
+    "params": {
+      "name": "execute_suganita",
+      "arguments": { "code": "लिखो 'Agent Execution Complete'\nनिरोध" }
+    },
+    "id": 1
+  }
+
+-------------------------------------------------------------------------------
+4. THREE WAYS TO INTERACT WITH LEIBNITZ
 -------------------------------------------------------------------------------
 
 Depending on your workflow, you can choose any of the 3 client options:
@@ -62,18 +114,11 @@ B. Suganita Terminal REPL (CLI Command Shell)
 
 C. Python SDK for AI Agents & Machines (`leibnitz6_sdk.py`)
    - A programmatic Python interface allowing autonomous AI agents, scripts, 
-     and third-party applications to run Suganita code and stream Sahai layers.
-   - Example Python code:
-       from leibnitz6_sdk import Leibnitz6Client
-       client = Leibnitz6Client()
-       res = client.execute("लिखो 'Hello Leibnitz'\nनिरोध")
-       print(res['output'])
+     and third-party applications to run Suganita code.
 
 -------------------------------------------------------------------------------
-4. SUGANITA LANGUAGE CHEAT SHEET (BASIC DEVANAGARI KEYWORDS)
+5. SUGANITA LANGUAGE CHEAT SHEET (BASIC DEVANAGARI KEYWORDS)
 -------------------------------------------------------------------------------
-
-Suganita uses intuitive Devanagari terms for mathematical operations:
 
   Keyword           Meaning / Purpose
   -------           -----------------
@@ -85,38 +130,13 @@ Suganita uses intuitive Devanagari terms for mathematical operations:
   गुणन / भागहार     Vedic multiplication and division
   निरोध             Halt program execution (Sāṅkhya cease)
 
-Example Suganita Script:
-------------------------
-  प्रवेश "audio_signal.wav"
-  लिखो "Processing audio spectrum..."
-  रूपरेखा "Audio FFT Analysis"
-  निरोध
-
 -------------------------------------------------------------------------------
-5. QUICK START IN 60 SECONDS
+6. QUICK START IN 60 SECONDS
 -------------------------------------------------------------------------------
 
-You can install and launch Leibnitz 6.0 on any machine by running this single 
-command in your terminal:
+Run this single command in your terminal:
 
   python -c "import urllib.request; exec(urllib.request.urlopen('https://yogoreal.net/install.py').read())"
-
-This automatically downloads the lightweight client files and creates desktop 
-launchers for Structured Notepad v4 and the Terminal REPL.
-
--------------------------------------------------------------------------------
-6. ENTERPRISE-GRADE STACK AT A GLANCE
--------------------------------------------------------------------------------
-
-Under the hood, Leibnitz 6.0 is built on 2026 enterprise engineering standards:
-
-- OWASP ASVS 5.0 & CISA Secure-by-Design security headers.
-- GDPR / CCPA / DPDP Privacy-by-Design with daily rotating SHA-256 IP pseudonymization.
-- Multi-Agent AI Interoperability: Anthropic MCP 1.0, Google A2A 1.0, and IBM ACP 1.0.
-- Cloud-Native Kubernetes HPA scaling and FinOps micro-cost observability.
-- Resilience4j Circuit Breakers & Kafka/EventBridge EventBus.
-- OpenTelemetry v1.28, Prometheus metrics, and Grafana Loki structured logs.
-- WCAG 2.2 Level AA & European Accessibility Act (EAA) compliance.
 
 -------------------------------------------------------------------------------
 7. NEED HELP OR DOCUMENTATION?
@@ -125,8 +145,6 @@ Under the hood, Leibnitz 6.0 is built on 2026 enterprise engineering standards:
 - Full Technical Manual: Read `README.txt` in the Leibnitz6 directory.
 - Official Web Portal: Visit https://yogoreal.net/leibnitz6.html
 - Server Health Check: Visit https://leibnitz6.onrender.com/health
-
-Welcome aboard, and enjoy exploring distributed signal processing with Leibnitz 6.0!
 
 © 2026 REAL Institute — https://yogoreal.net
 ===============================================================================
