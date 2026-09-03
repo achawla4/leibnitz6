@@ -108,16 +108,32 @@ def run_remote_installation():
     print(f"  [OK] Structured Notepad v4 GUI created: {notepad_bat} / {notepad_sh}")
     print(f"  [OK] Suganita Terminal REPL CLI created: {repl_bat} / {repl_sh}")
 
-    # Launch Structured Notepad v4 Client Immediately
-    print("\n[+] Launching Structured Notepad v4 Client...")
+    # Launch Client Interface (GUI Notebook if tkinter available, otherwise Terminal REPL CLI)
+    has_tkinter = True
+    try:
+        import tkinter
+    except ImportError:
+        has_tkinter = False
+
     env = os.environ.copy()
     env["PYTHONPATH"] = f"{target_dir}{ps}{env.get('PYTHONPATH', '')}"
-    subprocess.Popen([sys.executable, "-m", "structured_notepad_ext.notepad_app"], cwd=target_dir, env=env)
-    
-    print("\n==========================================================================")
-    print("  [SUCCESS] STRUCTURED NOTEPAD v4 CLIENT IS NOW RUNNING! HAPPY SIGNAL CODING!")
-    print("  (Connected to Central Leibnitz 6 Cloud Engine — Zero local server setup!)")
-    print("==========================================================================")
+
+    if has_tkinter:
+        print("\n[+] Launching Structured Notepad v4 GUI Client...")
+        subprocess.Popen([sys.executable, "-m", "structured_notepad_ext.notepad_app"], cwd=target_dir, env=env)
+        print("\n==========================================================================")
+        print("  [SUCCESS] STRUCTURED NOTEPAD v4 CLIENT IS NOW RUNNING! HAPPY SIGNAL CODING!")
+        print("  (Connected to Central Leibnitz 6 Cloud Engine — Zero local server setup!)")
+        print("==========================================================================")
+    else:
+        print("\n[!] Notice: 'tkinter' GUI library is not installed on this Linux system.")
+        print("    - To use the GUI Notebook: Run 'sudo apt install python3-tk' (Ubuntu/Debian) or 'sudo dnf install python3-tkinter' (Fedora)")
+        print("\n[+] Launching Suganita Terminal REPL CLI Client (Pure Terminal Mode)...")
+        subprocess.Popen([sys.executable, "-m", "leibnitz6_server.cli"], cwd=target_dir, env=env)
+        print("\n==========================================================================")
+        print("  [SUCCESS] SUGANITA TERMINAL REPL CLI IS NOW RUNNING! HAPPY SIGNAL CODING!")
+        print("  (Connected to Central Leibnitz 6 Cloud Engine — Zero local server setup!)")
+        print("==========================================================================")
 
 if __name__ == "__main__":
     run_remote_installation()

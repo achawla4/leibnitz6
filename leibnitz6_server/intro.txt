@@ -30,17 +30,17 @@ Step 1: Open your Terminal (or Command Prompt) and run the installer command:
 
 Step 2: Launch the Client Interface:
 
-  Option A (GUI Notebook - Structured Notepad v4):
-    - Linux / macOS:  ./StructuredNotepad_v4.sh
-                      (or direct command: PYTHONPATH="$(pwd)/leibnitz6-main:$(pwd):$PYTHONPATH" python3 -m structured_notepad_ext.notepad_app)
-    - Windows:        Double-click "StructuredNotepad_v4.bat"
-
-  Option B (Terminal REPL CLI - Suganita Shell):
+  Option A (Terminal REPL CLI - Pure Terminal Mode, Zero GUI Packages Needed):
     - Linux / macOS:  ./Suganita_Terminal_REPL.sh
                       (or direct command: PYTHONPATH="$(pwd)/leibnitz6-main:$(pwd):$PYTHONPATH" python3 -m leibnitz6_server.cli)
     - Windows:        Double-click "Suganita_Terminal_REPL.bat"
 
-Step 3: In the interactive notebook GUI or terminal REPL, enter your code:
+  Option B (GUI Notebook - Structured Notepad v4):
+    - Linux / macOS:  ./StructuredNotepad_v4.sh
+                      (Note for Linux GUI Users: If 'tkinter' is missing, run: sudo apt install python3-tk)
+    - Windows:        Double-click "StructuredNotepad_v4.bat"
+
+Step 3: In the notebook GUI or terminal REPL, enter your code:
 
   लिखो "नमस्ते Leibnitz 6.0!"
   निरोध
@@ -129,15 +129,15 @@ MCP JSON-RPC Request (`/api/mcp/v1/rpc`):
 
 Depending on your workflow, choose the model that fits your needs best:
 
-Model A: Interactive GUI Notebook (Structured Notepad v4)
-  - Ideal for visual exploration, inline spectral plots, and interactive cell editing.
-  - Linux / macOS: `./StructuredNotepad_v4.sh`
-  - Windows: `StructuredNotepad_v4.bat`
-
-Model B: Suganita Terminal REPL (CLI Shell)
-  - Ideal for terminal power users and fast command-line workflows.
+Model A: Suganita Terminal REPL (CLI Shell - Zero GUI Dependencies)
+  - Ideal for Linux terminal power users, SSH sessions, and headless servers.
   - Linux / macOS: `./Suganita_Terminal_REPL.sh`
   - Windows: `Suganita_Terminal_REPL.bat`
+
+Model B: Interactive GUI Notebook (Structured Notepad v4)
+  - Ideal for visual exploration, inline spectral plots, and interactive cell editing.
+  - Linux / macOS: `./StructuredNotepad_v4.sh` (Requires `python3-tk`)
+  - Windows: `StructuredNotepad_v4.bat`
 
 Model C: Machine-to-Machine SDK (`leibnitz6_sdk.py`)
   - Ideal for autonomous AI agents, Python backend integrations, and scripts.
