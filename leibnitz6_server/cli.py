@@ -19,7 +19,7 @@ from suganita_engine import compile_and_run
 from leibnitz6_server.protocol import TransmitProtocolHandler
 from leibnitz6_server.anytime_coder import AnytimeDecoder
 
-DEFAULT_SERVER_URL = os.environ.get("LEIBNITZ_SERVER_URL", "https://leibnitz7.onrender.com")
+DEFAULT_SERVER_URL = os.environ.get("LEIBNITZ_SERVER_URL", "https://leibnitz7-cloud-engine.onrender.com")
 
 def run_interactive_repl(server_url: str = DEFAULT_SERVER_URL):
     """Interactive Devanagari Suganita Terminal REPL Environment."""

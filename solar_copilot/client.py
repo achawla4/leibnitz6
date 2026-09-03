@@ -12,7 +12,7 @@ from .prompts import build_completion_prompt, build_explanation_prompt
 from .gguf_runner import GGUFModelManager
 
 DEFAULT_SOLAR_URL = "http://127.0.0.1:8080/v1/chat/completions"
-DEFAULT_CLOUD_SERVER = os.environ.get("LEIBNITZ_SERVER_URL", "https://leibnitz7.onrender.com")
+DEFAULT_CLOUD_SERVER = os.environ.get("LEIBNITZ_SERVER_URL", "https://leibnitz7-cloud-engine.onrender.com")
 
 class SolarLLMClient:
     def __init__(self, endpoint_url: str = None):
