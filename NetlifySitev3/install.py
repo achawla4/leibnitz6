@@ -54,22 +54,42 @@ def run_remote_installation():
 
     notepad_bat = os.path.join(cwd, "StructuredNotepad_v4.bat")
     repl_bat = os.path.join(cwd, "Suganita_Terminal_REPL.bat")
+    notepad_sh = os.path.join(cwd, "StructuredNotepad_v4.sh")
+    repl_sh = os.path.join(cwd, "Suganita_Terminal_REPL.sh")
     
-    # Client Launcher (GUI) with explicit PYTHONPATH
+    ps = os.pathsep
+
+    # Windows Client Launcher (GUI) with explicit PYTHONPATH
     with open(notepad_bat, 'w', encoding='utf-8') as f:
         f.write(f'@echo off\nset PYTHONPATH={target_dir};%PYTHONPATH%\ncd /d "{target_dir}"\nstart "Structured Notepad v4 Client" "{sys.executable}" -m structured_notepad_ext.notepad_app\n')
 
-    # Terminal REPL Launcher (CLI) with explicit PYTHONPATH
+    # Windows Terminal REPL Launcher (CLI) with explicit PYTHONPATH
     with open(repl_bat, 'w', encoding='utf-8') as f:
         f.write(f'@echo off\nset PYTHONPATH={target_dir};%PYTHONPATH%\ncd /d "{target_dir}"\n"{sys.executable}" -m leibnitz6_server.cli\npause\n')
 
-    print(f"  [OK] Structured Notepad v4 GUI created: {notepad_bat}")
-    print(f"  [OK] Suganita Terminal REPL CLI created: {repl_bat}")
+    # Linux/macOS Client Launcher (GUI)
+    with open(notepad_sh, 'w', encoding='utf-8') as f:
+        f.write(f'#!/usr/bin/env bash\nexport PYTHONPATH="{target_dir}:$PYTHONPATH"\ncd "{target_dir}"\n"{sys.executable}" -m structured_notepad_ext.notepad_app\n')
+    try:
+        os.chmod(notepad_sh, 0o755)
+    except Exception:
+        pass
+
+    # Linux/macOS Terminal REPL Launcher (CLI)
+    with open(repl_sh, 'w', encoding='utf-8') as f:
+        f.write(f'#!/usr/bin/env bash\nexport PYTHONPATH="{target_dir}:$PYTHONPATH"\ncd "{target_dir}"\n"{sys.executable}" -m leibnitz6_server.cli\n')
+    try:
+        os.chmod(repl_sh, 0o755)
+    except Exception:
+        pass
+
+    print(f"  [OK] Structured Notepad v4 GUI created: {notepad_bat} / {notepad_sh}")
+    print(f"  [OK] Suganita Terminal REPL CLI created: {repl_bat} / {repl_sh}")
 
     # Launch Structured Notepad v4 Client Immediately
     print("\n[+] Launching Structured Notepad v4 Client...")
     env = os.environ.copy()
-    env["PYTHONPATH"] = f"{target_dir};{env.get('PYTHONPATH', '')}"
+    env["PYTHONPATH"] = f"{target_dir}{ps}{env.get('PYTHONPATH', '')}"
     subprocess.Popen([sys.executable, "-m", "structured_notepad_ext.notepad_app"], cwd=target_dir, env=env)
     
     print("\n==========================================================================")
