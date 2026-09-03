@@ -42,6 +42,33 @@ protocol_handler = TransmitProtocolHandler(processed_dir=os.path.join(WORKSPACE_
 anytime_encoder = AnytimeEncoder()
 telemetry_monitor = UsageMonitor()
 
+@app.route('/', methods=['GET'])
+def root_index():
+    """Root GET handler for Leibnitz 7 Cloud Engine on Render."""
+    for base in [WORKSPACE_ROOT, os.path.dirname(__file__), os.getcwd()]:
+        file_path = os.path.join(base, 'leibnitz6.html')
+        if os.path.exists(file_path):
+            return send_from_directory(base, 'leibnitz6.html')
+    return jsonify({
+        'status': 'ONLINE',
+        'server': 'Leibnitz7',
+        'service': 'leibnitz7-cloud-engine',
+        'hallmark': 'Multi-Column Batch Ingestion & 2D Space-Time Fourier Analysis',
+        'health_check': '/health',
+        'space_time_analysis_api': '/api/security/space_time_analysis',
+        'live_threat_test_api': '/api/security/live_threat_test',
+        'hybrid_threat_validation_api': '/api/security/hybrid_threat_validation'
+    })
+
+@app.route('/leibnitz6.html', methods=['GET'])
+def get_leibnitz6_html():
+    """Serve leibnitz6.html interface directly."""
+    for base in [WORKSPACE_ROOT, os.path.dirname(__file__), os.getcwd()]:
+        file_path = os.path.join(base, 'leibnitz6.html')
+        if os.path.exists(file_path):
+            return send_from_directory(base, 'leibnitz6.html')
+    return Response("<h1>Leibnitz 7.0 Server Online</h1>", mimetype='text/html; charset=utf-8')
+
 @app.route('/intro.txt', methods=['GET'])
 def get_intro_txt():
     for base in [WORKSPACE_ROOT, os.path.dirname(__file__), os.getcwd()]:
