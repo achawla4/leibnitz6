@@ -34,8 +34,8 @@ def apply_security_headers(response: Response) -> Response:
     return response
 
 def validate_payload_security():
-    """Verify request size and rate limits before processing."""
-    client_ip = request.remote_addr or '127.0.0.1'
+    """Verify request size, rate limits, Cloudflare WAF, and Tollbit AI Content licensing headers before processing."""
+    client_ip = request.headers.get('CF-Connecting-IP') or request.headers.get('X-Forwarded-For', '').split(',')[0].strip() or request.remote_addr or '127.0.0.1'
     now = time.time()
 
     # Rate limiting check

