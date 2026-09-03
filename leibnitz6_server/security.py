@@ -34,7 +34,23 @@ def apply_security_headers(response: Response) -> Response:
     return response
 
 def validate_payload_security():
-    """Verify request size, rate limits, Cloudflare WAF, and Tollbit AI Content licensing headers before processing."""
+    """Verify request size, rate limits, Cloudflare WAF, Geo-blocking, and Tollbit AI Content licensing headers before processing."""
+    # Permanent Geo-Block Check: Seychelles (ISO Code: SC) - Spurious Tollbit bypass protection
+    country_code = (
+        request.headers.get('CF-IPCountry') or
+        request.headers.get('X-Country-Code') or
+        request.headers.get('X-Netlify-Country') or
+        request.headers.get('X-Country') or
+        request.headers.get('CloudFront-Viewer-Country') or
+        ''
+    ).strip().upper()
+
+    if country_code in ('SC', 'SEYCHELLES'):
+        return jsonify({
+            'status': 'SEC_GEOBLOCK_ENFORCED',
+            'error': 'Access from Seychelles (SC) is permanently restricted due to Tollbit compliance policy.'
+        }), 403
+
     client_ip = request.headers.get('CF-Connecting-IP') or request.headers.get('X-Forwarded-For', '').split(',')[0].strip() or request.remote_addr or '127.0.0.1'
     now = time.time()
 

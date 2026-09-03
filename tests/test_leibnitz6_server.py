@@ -106,3 +106,12 @@ def test_telemetry_metrics_monitoring():
     dash_res = test_client.get('/admin/dashboard')
     assert dash_res.status_code == 200
     assert "Leibnitz 6 Network Server Telemetry" in dash_res.get_data(as_text=True)
+
+def test_seychelles_geoblock():
+    test_client = app.test_client()
+    res = test_client.get('/health', headers={'CF-IPCountry': 'SC'})
+    assert res.status_code == 403
+    data = res.get_json()
+    assert data['status'] == 'SEC_GEOBLOCK_ENFORCED'
+    assert 'Seychelles' in data['error']
+
