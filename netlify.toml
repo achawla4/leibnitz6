@@ -1,0 +1,24 @@
+# Netlify Configuration File for REAL Institute Web Portal (Leibnitz 6.0)
+
+[build]
+  publish = "NetlifySitev3"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Access-Control-Allow-Origin = "*"
+
+[[headers]]
+  for = "/install.py"
+  [headers.values]
+    Content-Type = "text/x-python; charset=utf-8"
+    Access-Control-Allow-Origin = "*"
+
+[[headers]]
+  for = "/intro.txt"
+  [headers.values]
+    Content-Type = "text/plain; charset=utf-8"
+    Access-Control-Allow-Origin = "*"
