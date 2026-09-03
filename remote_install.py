@@ -41,23 +41,34 @@ def run_remote_installation():
     print("\n[Step 3/3] Creating Client Launchers...")
     cwd = os.getcwd()
     
+    target_dir = cwd
+    if not os.path.exists(os.path.join(cwd, "structured_notepad_ext")):
+        possible_root = os.path.join(cwd, "REALWeb", "Leibnitz6")
+        if os.path.exists(possible_root):
+            target_dir = possible_root
+
+    if target_dir not in sys.path:
+        sys.path.insert(0, target_dir)
+
     notepad_bat = os.path.join(cwd, "StructuredNotepad_v4.bat")
     repl_bat = os.path.join(cwd, "Suganita_Terminal_REPL.bat")
     
-    # Client Launcher (GUI)
+    # Client Launcher (GUI) with explicit PYTHONPATH
     with open(notepad_bat, 'w', encoding='utf-8') as f:
-        f.write(f'@echo off\ncd /d "{cwd}"\nstart "Structured Notepad v4 Client" "{sys.executable}" -m structured_notepad_ext.notepad_app\n')
+        f.write(f'@echo off\nset PYTHONPATH={target_dir};%PYTHONPATH%\ncd /d "{target_dir}"\nstart "Structured Notepad v4 Client" "{sys.executable}" -m structured_notepad_ext.notepad_app\n')
 
-    # Terminal REPL Launcher (CLI)
+    # Terminal REPL Launcher (CLI) with explicit PYTHONPATH
     with open(repl_bat, 'w', encoding='utf-8') as f:
-        f.write(f'@echo off\ncd /d "{cwd}"\n"{sys.executable}" -m leibnitz6_server.cli\npause\n')
+        f.write(f'@echo off\nset PYTHONPATH={target_dir};%PYTHONPATH%\ncd /d "{target_dir}"\n"{sys.executable}" -m leibnitz6_server.cli\npause\n')
 
     print(f"  [OK] Structured Notepad v4 GUI created: {notepad_bat}")
     print(f"  [OK] Suganita Terminal REPL CLI created: {repl_bat}")
 
     # Launch Structured Notepad v4 Client Immediately
     print("\n[+] Launching Structured Notepad v4 Client...")
-    subprocess.Popen([sys.executable, "-m", "structured_notepad_ext.notepad_app"], cwd=cwd, env=os.environ.copy())
+    env = os.environ.copy()
+    env["PYTHONPATH"] = f"{target_dir};{env.get('PYTHONPATH', '')}"
+    subprocess.Popen([sys.executable, "-m", "structured_notepad_ext.notepad_app"], cwd=target_dir, env=env)
     
     print("\n==========================================================================")
     print("  [SUCCESS] STRUCTURED NOTEPAD v4 CLIENT IS NOW RUNNING! HAPPY SIGNAL CODING!")
