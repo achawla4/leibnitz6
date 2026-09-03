@@ -67,6 +67,9 @@ class TokenType(Enum):
     RASA_PADHO = auto()     # रस_पढ़ो (analog read / signal read)
     RUKO = auto()           # रुको (delay)
     RUPAREKHA = auto()      # रूपरेखा (plot / spectrum preview)
+    BAHUSTAMBHA = auto()     # बहुस्तम्भ (multi-column signal load)
+    SAMYUKTA = auto()        # संयुक्त (joint analysis / cross-correlation)
+    SANCHATMAKA = auto()     # संचात्मक (batch processing)
     
     # VM Stack Opcodes
     PRAVESHA = auto()       # प्रवेश (push)
@@ -118,6 +121,9 @@ DEVANAGARI_KEYWORDS = {
     'रस_पढ़ो': TokenType.RASA_PADHO,
     'रुको': TokenType.RUKO,
     'रूपरेखा': TokenType.RUPAREKHA,
+    'बहुस्तम्भ': TokenType.BAHUSTAMBHA,
+    'संयुक्त': TokenType.SAMYUKTA,
+    'संचात्मक': TokenType.SANCHATMAKA,
     'प्रवेश': TokenType.PRAVESHA,
     'विसर्जन': TokenType.VISARJANA,
     'पुनरावृत्ति': TokenType.PUNARAVRTTI,
@@ -144,6 +150,9 @@ ASCII_ALIASES = {
     'pop': TokenType.VISARJANA,
     'delay': TokenType.RUKO,
     'plot': TokenType.RUPAREKHA,
+    'multicolumn': TokenType.BAHUSTAMBHA,
+    'joint': TokenType.SAMYUKTA,
+    'batch': TokenType.SANCHATMAKA,
 }
 
 

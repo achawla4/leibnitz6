@@ -32,14 +32,44 @@ class SolarLLMClient:
             return True
         return False
 
-    def complete_code(self, prompt_text: str, timeout: float = 4.0) -> str:
+    def complete_code(self, prompt_text: str, timeout: float = 30.0) -> str:
         """
         Send completion request to Solar AI Copilot.
-        Priority 1: Centralized Cloud Server on Render (https://leibnitz6.onrender.com/api/copilot/complete).
-        Priority 2: Local Server Engine on port 5006.
-        Priority 3: Offline Suganita rule-based autocomplete engine.
+        Prioritizes high-accuracy neural generation over speed (extended timeouts & max_tokens).
+        Priority 1: Direct Local llama-server Endpoint (Local GPU / Vulkan Solar GGUF).
+        Priority 2: Local Network Server Engine on Port 5006.
+        Priority 3: Centralized Cloud Server on Render (https://leibnitz6.onrender.com/api/copilot/complete).
+        Priority 4: Fallback Offline Suganita rule-based autocomplete engine.
         """
-        # Priority 1: Cloud Server Centralized Copilot on Render
+        # Priority 1: Direct Local llama-server Endpoint (Local GPU / Vulkan Solar GGUF)
+        payload = {
+            "messages": [
+                {"role": "user", "content": build_completion_prompt(prompt_text)}
+            ],
+            "max_tokens": 300,
+            "temperature": 0.2
+        }
+        try:
+            resp = requests.post(self.endpoint_url, json=payload, timeout=timeout)
+            if resp.status_code == 200:
+                data = resp.json()
+                content = data['choices'][0]['message']['content']
+                if content and content.strip():
+                    return content.strip()
+        except Exception:
+            pass
+
+        # Priority 2: Local Network Server Engine on Port 5006
+        try:
+            net_resp = requests.post("http://127.0.0.1:5006/api/copilot/complete", json={"prompt": prompt_text}, timeout=timeout)
+            if net_resp.status_code == 200:
+                data = net_resp.json()
+                if data.get('status') == 'SUCCESS' and data.get('completion'):
+                    return data['completion'].strip()
+        except Exception:
+            pass
+
+        # Priority 3: Cloud Server Centralized Copilot on Render
         try:
             cloud_resp = requests.post(f"{DEFAULT_CLOUD_SERVER}/api/copilot/complete", json={"prompt": prompt_text}, timeout=timeout)
             if cloud_resp.status_code == 200:
@@ -49,43 +79,16 @@ class SolarLLMClient:
         except Exception:
             pass
 
-        # Priority 2: Local Server Engine on Port 5006
-        try:
-            net_resp = requests.post("http://127.0.0.1:5006/api/copilot/complete", json={"prompt": prompt_text}, timeout=2.0)
-            if net_resp.status_code == 200:
-                data = net_resp.json()
-                if data.get('status') == 'SUCCESS' and data.get('completion'):
-                    return data['completion'].strip()
-        except Exception:
-            pass
-
-        # Priority 2: Direct Local llama-server Endpoint
-        payload = {
-            "messages": [
-                {"role": "user", "content": build_completion_prompt(prompt_text)}
-            ],
-            "max_tokens": 150,
-            "temperature": 0.2
-        }
-        try:
-            resp = requests.post(self.endpoint_url, json=payload, timeout=timeout)
-            if resp.status_code == 200:
-                data = resp.json()
-                content = data['choices'][0]['message']['content']
-                return content.strip()
-        except Exception:
-            pass
-
-        # Priority 3: Fallback Offline Suganita Autocomplete Engine
+        # Priority 4: Fallback Offline Suganita Autocomplete Engine
         return self._generate_fallback_completion(prompt_text)
 
-    def explain_code(self, code_snippet: str, timeout: float = 3.0) -> str:
-        """Send code explanation request to Solar-10.7B llama-server."""
+    def explain_code(self, code_snippet: str, timeout: float = 30.0) -> str:
+        """Send code explanation request to Solar-10.7B llama-server with extended timeout for deep neural reasoning."""
         payload = {
             "messages": [
                 {"role": "user", "content": build_explanation_prompt(code_snippet)}
             ],
-            "max_tokens": 300,
+            "max_tokens": 600,
             "temperature": 0.3
         }
         try:

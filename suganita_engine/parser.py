@@ -75,6 +75,27 @@ class PlotNode(ASTNode):
     def __repr__(self):
         return f"PlotNode(target={self.target}, title={repr(self.title)})"
 
+class MultiColumnNode(ASTNode):
+    def __init__(self, target: ASTNode):
+        self.target = target
+
+    def __repr__(self):
+        return f"MultiColumnNode({self.target})"
+
+class JointAnalysisNode(ASTNode):
+    def __init__(self, title: str = "Leibnitz 7 Joint Signal Analysis"):
+        self.title = title
+
+    def __repr__(self):
+        return f"JointAnalysisNode(title={repr(self.title)})"
+
+class BatchProcessNode(ASTNode):
+    def __init__(self, target: ASTNode):
+        self.target = target
+
+    def __repr__(self):
+        return f"BatchProcessNode({self.target})"
+
 class DelayNode(ASTNode):
     def __init__(self, ms: ASTNode):
         self.ms = ms
@@ -155,6 +176,28 @@ class Parser:
                 title = expr.value
             self._optional_terminator()
             return PlotNode(expr, title=title)
+
+        # Multi-Column / Bahustambha statement: बहुस्तम्भ <csv_path_or_expr>
+        if self._match(TokenType.BAHUSTAMBHA):
+            expr = self._parse_expression()
+            self._optional_terminator()
+            return MultiColumnNode(expr)
+
+        # Joint Analysis / Samyukta statement: संयुक्त <optional_title>
+        if self._match(TokenType.SAMYUKTA):
+            title = "Leibnitz 7 Joint Signal Analysis"
+            if self._peek().type in (TokenType.STRING, TokenType.IDENTIFIER):
+                expr = self._parse_expression()
+                if isinstance(expr, LiteralNode) and expr.val_type == 'string':
+                    title = expr.value
+            self._optional_terminator()
+            return JointAnalysisNode(title=title)
+
+        # Batch Processing / Sanchatmaka statement: संचात्मक <dir_path>
+        if self._match(TokenType.SANCHATMAKA):
+            expr = self._parse_expression()
+            self._optional_terminator()
+            return BatchProcessNode(expr)
 
         # Delay / Ruko statement: रुको <ms>
         if self._match(TokenType.RUKO):

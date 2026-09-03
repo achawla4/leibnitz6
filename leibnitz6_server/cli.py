@@ -24,7 +24,7 @@ DEFAULT_SERVER_URL = os.environ.get("LEIBNITZ_SERVER_URL", "https://leibnitz6.on
 def run_interactive_repl(server_url: str = DEFAULT_SERVER_URL):
     """Interactive Devanagari Suganita Terminal REPL Environment."""
     print("==========================================================================")
-    print("           LEIBNITZ 6 DEVANAGARI SUGANITA TERMINAL REPL v6.0              ")
+    print("           LEIBNITZ 7 BATCH & JOINT SUGANITA TERMINAL REPL v7.0          ")
     print("==========================================================================")
     print(f"[*] Target Network Server: {server_url}")
     print("[*] Commands: Type Suganita code, 'copilot <prompt>' for AI assist, 'help', or 'exit'.\n")
@@ -48,10 +48,13 @@ def run_interactive_repl(server_url: str = DEFAULT_SERVER_URL):
                 break
 
             if line.lower() == 'help':
-                print("\n  [Suganita Terminal Help]")
-                print("  • Keyword Reference: लिखो, प्रवेश, विसर्जन, रुको, रूपरेखा, निरोध, शु, यदि, अन्यथा")
-                print("  • Solar AI Assist:  Type 'copilot <your query>'")
-                print("  • Multiline Code:   Enter lines, press Enter twice to evaluate.\n")
+                print("\n  [Suganita Terminal Help — Leibnitz 7]")
+                print("  • Keyword Reference: लिखो, प्रवेश, विसर्जन, रुको, रूपरेखा, बहुस्तम्भ, संयुक्त, संचात्मक, निरोध, शु, यदि, अन्यथा")
+                print("  • Multi-Column CSV Load: बहुस्तम्भ 'data.csv'")
+                print("  • Joint Signal Analysis: संयुक्त 'Multi-Channel Analysis'")
+                print("  • Batch Directory Load:  संचात्मक 'signals_folder/'")
+                print("  • Solar AI Assist:       Type 'copilot <your query>'")
+                print("  • Multiline Code:        Enter lines, press Enter twice to evaluate.\n")
                 continue
 
             if line.lower().startswith('copilot '):

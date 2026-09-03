@@ -93,6 +93,67 @@ class Leibnitz6Client:
         solar = SolarLLMClient()
         return solar.complete_code(prompt)
 
+    def batch_process_csv(self, csv_content_or_file: str, dataset_name: str = "multi_col_dataset") -> Dict[str, Any]:
+        """
+        Leibnitz 7 Multi-Column CSV & Spreadsheet Batch Signal Processing.
+        Ingests entire spreadsheets of signals, performing joint processing and analysis.
+        """
+        payload = {
+            "csv_data": csv_content_or_file,
+            "dataset_name": dataset_name
+        }
+        headers = {"X-Client-ID": self.client_id}
+
+        try:
+            resp = requests.post(f"{self.server_url}/api/batch_process", json=payload, headers=headers, timeout=10.0)
+            if resp.status_code == 200:
+                return resp.json()
+        except Exception:
+            pass
+
+        # Local offline fallback
+        from suganita_engine.signal_adapter import SignalAdapter
+        adapter = SignalAdapter()
+        adapter.load_csv_signals(csv_content_or_file, dataset_name=dataset_name)
+        joint_res = adapter.process_joint_analysis()
+        b64_plot = adapter.render_multi_column_plot(title=f"Leibnitz 7 Joint Analysis — {dataset_name}")
+        return {
+            "status": "OFFLINE_FALLBACK",
+            "server": "Leibnitz7_Local",
+            "dataset_name": dataset_name,
+            "joint_analysis": joint_res,
+            "plot_b64": b64_plot
+        }
+
+    def joint_analysis(self, signals_dict: Dict[str, list]) -> Dict[str, Any]:
+        """
+        Execute joint cross-correlation and spectral analysis across multi-channel signal dictionaries.
+        """
+        headers = {"X-Client-ID": self.client_id}
+        try:
+            resp = requests.post(f"{self.server_url}/api/joint_analysis", json={"signals": signals_dict}, headers=headers, timeout=10.0)
+            if resp.status_code == 200:
+                return resp.json()
+        except Exception:
+            pass
+
+        from suganita_engine.signal_adapter import SignalAdapter
+        import numpy as np
+        adapter = SignalAdapter()
+        for name, vals in signals_dict.items():
+            y = np.array(vals, dtype=float)
+            t = np.linspace(0, len(y)/1000.0, len(y), endpoint=False)
+            adapter.signals[name] = {'t': t, 'y': y, 'sr': 1000, 'channel': name}
+        joint_res = adapter.process_joint_analysis()
+        b64_plot = adapter.render_multi_column_plot(title="Joint Signal Analysis")
+        return {
+            "status": "OFFLINE_FALLBACK",
+            "joint_analysis": joint_res,
+            "plot_b64": b64_plot
+        }
+
+Leibnitz7Client = Leibnitz6Client
+
 if __name__ == "__main__":
     # Self-test demonstration
     client = Leibnitz6Client(client_id="SelfTest_Machine_Agent")

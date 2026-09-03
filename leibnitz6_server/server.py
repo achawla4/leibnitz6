@@ -62,8 +62,9 @@ def get_install_py():
 def health():
     return jsonify({
         'status': 'ONLINE',
-        'server': 'Leibnitz6',
-        'version': '6.0.0',
+        'server': 'Leibnitz7',
+        'version': '7.0.0',
+        'hallmark': 'Batch and Joint Signal Processing of Multi-Column CSVs and Spreadsheets',
         'accessibility_2026': ['WCAG_2.2_Level_AA', 'European_Accessibility_Act_EAA', 'ADA_Title_III', 'ARIA_1.3_Landmarks', 'WebAuthn_Passkeys'],
         'observability_2026': ['OpenTelemetry_v1.28', 'Prometheus', 'Grafana_Loki', 'Tempo_Jaeger', 'Datadog_APM'],
         'resilience_2026': ['Resilience4j_CircuitBreaker', 'Kafka_EventBridge_EventBus', 'Istio_Linkerd_eBPF', 'Zero_Downtime_RollingUpdate'],
@@ -72,7 +73,87 @@ def health():
         'privacy_compliance': ['GDPR_Art_32', 'CCPA_CPRA', 'DPDP_Act_2023', 'Global_Privacy_Control_GPC'],
         'ai_protocols': ['Anthropic_MCP_1.0', 'Google_A2A_1.0', 'IBM_ACP_1.0'],
         'suganita_standards_2026': ['WebAssembly_WASM', 'Memory_Safe_VM', 'Post_Quantum_PQC_Dilithium'],
-        'features': ['Suganita_VM', 'Sahai_Anytime_Streaming', 'SignalProcessingSuite', 'Telemetry_Monitor', 'Solar_GGUF_Copilot']
+        'features': ['Batch_Joint_MultiColumn_Processing', 'Suganita_VM', 'Sahai_Anytime_Streaming', 'SignalProcessingSuite', 'Telemetry_Monitor', 'Solar_GGUF_Copilot']
+    })
+
+@app.route('/api/batch_process', methods=['POST'])
+def batch_process():
+    """
+    Leibnitz 7 Multi-Column CSV Spreadsheet Batch & Joint Signal Processing Endpoint.
+    Accepts CSV text, spreadsheet uploads, or JSON dictionary of multi-channel signal columns.
+    """
+    from suganita_engine.signal_adapter import SignalAdapter
+    adapter = SignalAdapter()
+    
+    csv_data = None
+    dataset_name = "spreadsheet_batch"
+    
+    if request.is_json:
+        data = request.get_json(force=True, silent=True) or {}
+        csv_data = data.get('csv_data') or data.get('content')
+        dataset_name = data.get('dataset_name', dataset_name)
+    elif 'file' in request.files:
+        uploaded_file = request.files['file']
+        csv_data = uploaded_file.read().decode('utf-8', errors='ignore')
+        dataset_name = uploaded_file.filename.rsplit('.', 1)[0]
+    elif request.data:
+        csv_data = request.data.decode('utf-8', errors='ignore')
+
+    if not csv_data:
+        # Fallback load sample_signal.csv if present
+        sample_path = os.path.join(WORKSPACE_ROOT, 'sample_signal.csv')
+        if os.path.exists(sample_path):
+            ds_res = adapter.load_csv_signals(sample_path, dataset_name="sample_signal")
+        else:
+            adapter.generate_synthetic_signal("ch1_sine", "sinusoidal", 10.0)
+            adapter.generate_synthetic_signal("ch2_chirp", "chirp", 5.0)
+            adapter.generate_synthetic_signal("ch3_noise", "noise")
+    else:
+        ds_res = adapter.load_csv_signals(csv_data, dataset_name=dataset_name)
+
+    joint_summary = adapter.process_joint_analysis()
+    b64_plot = adapter.render_multi_column_plot(title=f"Leibnitz 7 Batch & Joint Analysis — {dataset_name}")
+
+    client_ip = request.remote_addr or '127.0.0.1'
+    client_id = request.headers.get('X-Client-ID', 'Leibnitz7_BatchClient')
+    telemetry_monitor.record_request(client_ip, client_id, action="batch_process", char_count=len(csv_data or ''))
+
+    return jsonify({
+        'status': 'SUCCESS',
+        'server': 'Leibnitz7',
+        'dataset_name': dataset_name,
+        'joint_analysis': joint_summary,
+        'plot_b64': b64_plot
+    })
+
+@app.route('/api/joint_analysis', methods=['POST'])
+def joint_analysis():
+    """
+    Leibnitz 7 Joint Cross-Correlation and Spectral Density Analysis Endpoint.
+    """
+    import numpy as np
+    from suganita_engine.signal_adapter import SignalAdapter
+    adapter = SignalAdapter()
+    data = request.get_json(force=True, silent=True) or {}
+    
+    signals_dict = data.get('signals', {})
+    if signals_dict:
+        for name, values in signals_dict.items():
+            y = np.array(values, dtype=float)
+            t = np.linspace(0, len(y)/1000.0, len(y), endpoint=False)
+            adapter.signals[name] = {'t': t, 'y': y, 'sr': 1000, 'channel': name}
+    else:
+        adapter.generate_synthetic_signal("ch1", "sinusoidal", 12.0)
+        adapter.generate_synthetic_signal("ch2", "chirp", 8.0)
+
+    joint_res = adapter.process_joint_analysis()
+    plot_b64 = adapter.render_multi_column_plot(title="Joint Multi-Channel Correlation & Spectral Analysis")
+
+    return jsonify({
+        'status': 'SUCCESS',
+        'server': 'Leibnitz7',
+        'joint_analysis': joint_res,
+        'plot_b64': plot_b64
     })
 
 @app.route('/api/transmit', methods=['POST'])

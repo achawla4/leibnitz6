@@ -4,8 +4,8 @@
     <link rel="icon" href="favicon.png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Leibnitz 6.0 — Signal Processing Platform & Structured Notepad v4</title>
-    <meta name="description" content="Official release of Leibnitz 6.0 signal processing platform, featuring Suganita Devanagari DSL, Sahai Anytime Coding protocol, Structured Notepad v4, and Universal GGUF AI Copilot.">
+    <title>Leibnitz 7.0 — Batch & Joint Signal Processing Platform & Multi-Column Spreadsheet Analysis</title>
+    <meta name="description" content="Official release of Leibnitz 7.0 signal processing platform, featuring multi-column spreadsheet batch ingestion, joint cross-correlation analysis, Suganita Devanagari DSL, Sahai Anytime Streaming, and Universal GGUF AI Copilot.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=Great+Vibes&display=swap" rel="stylesheet">
     <style>
@@ -223,6 +223,7 @@
         <a href="https://yogoreal.net" class="logo" aria-label="REAL Institute Home">REAL Institute</a>
         <nav class="nav-links" role="navigation" aria-label="Main Navigation">
         <a href="#installer">Remote Installer</a>
+        <a href="#batch-joint">Batch &amp; Joint Processing</a>
         <a href="#suganita">Suganita DSL</a>
         <a href="#notepad">Structured Notepad v4</a>
         <a href="#sahai">Sahai Streaming</a>
@@ -231,43 +232,55 @@
     </nav>
 </header>
 
-<main>
+<main id="main-content">
     <section class="hero">
-        <div class="status-badge">● LEIBNITZ 6.0 NETWORK SERVER PLATFORM RELEASED</div>
-        <h1>Distributed Signal Processing Server & Devanagari Suganita DSL</h1>
+        <div class="status-badge">● LEIBNITZ 7.0 MULTI-COLUMN BATCH &amp; JOINT SIGNAL ENGINE RELEASED</div>
+        <h1>Multi-Column Spreadsheet Batch Ingestion &amp; Joint Signal Processing</h1>
         <p class="lede">
-            Leibnitz 6.0 operates as a high-throughput, distributed Network Server streaming spectral signals via Sahai anytime protocols, serving Suganita Devanagari DSL executions, and hosting Universal GGUF AI copilot endpoints for client applications like Structured Notepad v4.
+            The hallmark of <strong>Leibnitz 7</strong> is its native capability to execute batch and joint processing and analysis not just of single-column signals, but of entire spreadsheets of signals and multi-column CSV datasets. Simultaneously compute cross-correlation matrices, stacked multi-channel spectra, and cross-channel statistics.
         </p>
     </section>
 
     <!-- Remote Installer Section -->
     <section id="installer" style="margin-bottom: 64px;">
         <h2 style="font-family: 'IBM Plex Mono', monospace; text-align: center; margin-bottom: 24px; color: var(--text-light);">
-            ⚡ Immediate Deployment of Network Server & Client
+            ⚡ Immediate Deployment of Leibnitz 7 Network Server &amp; Client
         </h2>
         <div class="terminal-installer">
             <div class="terminal-header">
-                <span class="terminal-title">NETWORK SERVER & CLIENT REMOTE ONE-LINER</span>
+                <span class="terminal-title">LEIBNITZ 7 BATCH SIGNAL SERVER REMOTE ONE-LINER</span>
                 <span style="color: var(--text-muted); font-size: 12px;">Standard Python 3</span>
             </div>
             <div class="terminal-code">python -c "import urllib.request; exec(urllib.request.urlopen('https://yogoreal.net/install.py').read())"</div>
             <p style="margin-top: 14px; color: var(--text-muted); font-size: 13px;">
-                Deploys and launches the <strong>Leibnitz 6 Network Server</strong> listening on port 5006, configures active <code>.gguf</code> model paths, and launches the connected <strong>Structured Notepad v4 Client</strong>. Includes automatic offline fallback.
+                Deploys and launches the <strong>Leibnitz 7 Multi-Column Server</strong> listening on port 5006 with endpoints for <code>/api/batch_process</code>, <code>/api/joint_analysis</code>, and <strong>Structured Notepad v4</strong> client.
             </p>
         </div>
     </section>
 
     <!-- Key Capabilities Grid -->
     <section id="capabilities" class="features-grid">
-        <div class="feature-card" id="suganita">
-            <h3>🕉 Suganita Devanagari DSL</h3>
+        <div class="feature-card" id="batch-joint">
+            <h3>📊 Batch &amp; Joint Multi-Column Processing</h3>
             <p>
-                First-class signal processing syntax written entirely in Devanagari script. Execute spectral transforms, IIR/FIR filter chains, and signal visualization commands directly in native script syntax.
+                Hallmark capability of Leibnitz 7: Seamlessly ingest multi-column CSV spreadsheets, directory batches, and multi-channel arrays. Automatically compute Pearson cross-correlation matrices, peak lag offsets, stacked waveform plots, and joint spectral overlays.
+            </p>
+            <div class="code-preview-box">
+<span style="color: #f59e0b;">बहुस्तम्भ</span> <span style="color: #10b981;">"sample_signal.csv"</span>
+<span style="color: #f59e0b;">संयुक्त</span> <span style="color: #10b981;">"Joint Multi-Channel Matrix"</span>
+<span style="color: #f59e0b;">संचात्मक</span> <span style="color: #10b981;">"batch_directory/"</span>
+            </div>
+        </div>
+
+        <div class="feature-card" id="suganita">
+            <h3>🕉 Suganita Devanagari DSL v7.0</h3>
+            <p>
+                First-class signal processing syntax written in Devanagari script. Features syntax extensions for multi-column spreadsheets (<code>बहुस्तम्भ</code>), joint correlation analysis (<code>संयुक्त</code>), and directory batch execution (<code>संचात्मक</code>).
             </p>
             <div class="code-preview-box">
 <span style="color: #f59e0b;">रूपरेखा</span> सिग्नलबफर <span style="color: #10b981;">प्रवेश</span>
     आवृत्ति = 1000
-    लिखो("संकेत विश्लेषण प्रारंभ...")
+    लिखो("बहुस्तम्भ संकेत विश्लेषण प्रारंभ...")
 <span style="color: #f59e0b;">निरोध</span>
             </div>
         </div>
