@@ -42,6 +42,14 @@ protocol_handler = TransmitProtocolHandler(processed_dir=os.path.join(WORKSPACE_
 anytime_encoder = AnytimeEncoder()
 telemetry_monitor = UsageMonitor()
 
+@app.route('/intro.txt', methods=['GET'])
+def get_intro_txt():
+    return send_from_directory(WORKSPACE_ROOT, 'intro.txt', mimetype='text/plain; charset=utf-8')
+
+@app.route('/install.py', methods=['GET'])
+def get_install_py():
+    return send_from_directory(WORKSPACE_ROOT, 'install.py', mimetype='text/x-python; charset=utf-8')
+
 @app.route('/health', methods=['GET'])
 def health():
     return jsonify({
