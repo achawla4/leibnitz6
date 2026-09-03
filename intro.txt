@@ -1,0 +1,132 @@
+===============================================================================
+                        WELCOME TO LEIBNITZ 6.0
+            AN INTRODUCTORY GUIDE FOR NEW USERS & DEVELOPERS
+===============================================================================
+
+Welcome to Leibnitz 6.0! 
+
+If you are new to Leibnitz, this document will give you a clear, friendly, and 
+complete overview of what Leibnitz is, how it works, and how you can start using it 
+in less than 60 seconds.
+
+-------------------------------------------------------------------------------
+1. WHAT IS LEIBNITZ 6.0?
+-------------------------------------------------------------------------------
+
+Leibnitz 6.0 is a state-of-the-art distributed signal processing platform created by 
+the REAL Institute. It brings together three powerful innovations:
+
+1. Suganita (सुगणिता):
+   The world's first Nyaya-logic compatible Devanagari Domain-Specific Language (DSL) 
+   designed for spectral signal analysis, Fast Fourier Transforms (FFT), and mathematical modeling.
+
+2. Sahai Anytime Coding Protocol:
+   A progressive streaming algorithm that provides instant approximate answers 
+   which automatically refine into high-precision calculations as time permits.
+
+3. Central Cloud AI Copilot (Solar-10.7B GGUF):
+   An integrated AI programming assistant that generates, explains, and debugs 
+   Suganita signal scripts directly inside your editor or terminal.
+
+-------------------------------------------------------------------------------
+2. THE ZERO-SERVER ARCHITECTURE (NO SETUP REQUIRED!)
+-------------------------------------------------------------------------------
+
+As a user, you NEVER have to install, configure, or run a local backend server!
+
+Leibnitz 6.0 operates on a Zero-Server Cloud Architecture:
+- A high-performance central cloud engine hosted on Render handles heavy FFT math, 
+  Suganita execution, and AI Copilot completions.
+- You simply launch lightweight client interfaces on your computer that talk 
+  directly to the cloud engine.
+
+-------------------------------------------------------------------------------
+3. THREE WAYS TO INTERACT WITH LEIBNITZ
+-------------------------------------------------------------------------------
+
+Depending on your workflow, you can choose any of the 3 client options:
+
+A. Structured Notepad v4 (Interactive GUI Notebook)
+   - A visual, Jupyter-style interactive notebook.
+   - Features cell execution (Shift+Enter), inline spectral FFT plots, and 
+     Devanagari syntax highlighting.
+   - How to launch: Double-click `StructuredNotepad_v4.bat` or run:
+     python -m structured_notepad_ext.notepad_app
+
+B. Suganita Terminal REPL (CLI Command Shell)
+   - A fast, terminal-based shell for keyboard-centric users.
+   - Execute Suganita commands line-by-line (`suganita>`) or ask AI Copilot 
+     questions directly (`copilot write FFT code`).
+   - How to launch: Double-click `Suganita_Terminal_REPL.bat` or run:
+     python -m leibnitz6_server.cli
+
+C. Python SDK for AI Agents & Machines (`leibnitz6_sdk.py`)
+   - A programmatic Python interface allowing autonomous AI agents, scripts, 
+     and third-party applications to run Suganita code and stream Sahai layers.
+   - Example Python code:
+       from leibnitz6_sdk import Leibnitz6Client
+       client = Leibnitz6Client()
+       res = client.execute("लिखो 'Hello Leibnitz'\nनिरोध")
+       print(res['output'])
+
+-------------------------------------------------------------------------------
+4. SUGANITA LANGUAGE CHEAT SHEET (BASIC DEVANAGARI KEYWORDS)
+-------------------------------------------------------------------------------
+
+Suganita uses intuitive Devanagari terms for mathematical operations:
+
+  Keyword           Meaning / Purpose
+  -------           -----------------
+  लिखो "text"       Print text or output message to display
+  प्रवेश "buffer"   Define input signal data buffer / array
+  रूपरेखा "title"   Calculate FFT spectrum and render visual plot
+  रुको <ms>         Pause execution for specified milliseconds
+  यदि ... अन्यथा    Nyaya conditional logic (if ... else)
+  गुणन / भागहार     Vedic multiplication and division
+  निरोध             Halt program execution (Sāṅkhya cease)
+
+Example Suganita Script:
+------------------------
+  प्रवेश "audio_signal.wav"
+  लिखो "Processing audio spectrum..."
+  रूपरेखा "Audio FFT Analysis"
+  निरोध
+
+-------------------------------------------------------------------------------
+5. QUICK START IN 60 SECONDS
+-------------------------------------------------------------------------------
+
+You can install and launch Leibnitz 6.0 on any machine by running this single 
+command in your terminal:
+
+  python -c "import urllib.request; exec(urllib.request.urlopen('https://yogoreal.net/install.py').read())"
+
+This automatically downloads the lightweight client files and creates desktop 
+launchers for Structured Notepad v4 and the Terminal REPL.
+
+-------------------------------------------------------------------------------
+6. ENTERPRISE-GRADE STACK AT A GLANCE
+-------------------------------------------------------------------------------
+
+Under the hood, Leibnitz 6.0 is built on 2026 enterprise engineering standards:
+
+- OWASP ASVS 5.0 & CISA Secure-by-Design security headers.
+- GDPR / CCPA / DPDP Privacy-by-Design with daily rotating SHA-256 IP pseudonymization.
+- Multi-Agent AI Interoperability: Anthropic MCP 1.0, Google A2A 1.0, and IBM ACP 1.0.
+- Cloud-Native Kubernetes HPA scaling and FinOps micro-cost observability.
+- Resilience4j Circuit Breakers & Kafka/EventBridge EventBus.
+- OpenTelemetry v1.28, Prometheus metrics, and Grafana Loki structured logs.
+- WCAG 2.2 Level AA & European Accessibility Act (EAA) compliance.
+
+-------------------------------------------------------------------------------
+7. NEED HELP OR DOCUMENTATION?
+-------------------------------------------------------------------------------
+
+- Full Technical Manual: Read `README.txt` in the Leibnitz6 directory.
+- Official Web Portal: Visit https://yogoreal.net/leibnitz6.html
+- Server Health Check: Visit https://leibnitz6.onrender.com/health
+
+Welcome aboard, and enjoy exploring distributed signal processing with Leibnitz 6.0!
+
+© 2026 REAL Institute — https://yogoreal.net
+===============================================================================
