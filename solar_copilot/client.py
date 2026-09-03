@@ -10,6 +10,7 @@ import json
 import re
 from .prompts import build_completion_prompt, build_explanation_prompt
 from .gguf_runner import GGUFModelManager
+from .provider_host import GGUFProviderHostManager, PROVIDER_REGISTRY
 
 DEFAULT_SOLAR_URL = "http://127.0.0.1:8080/v1/chat/completions"
 DEFAULT_CLOUD_SERVER = os.environ.get("LEIBNITZ_SERVER_URL", "https://leibnitz7-cloud-engine.onrender.com")
@@ -17,15 +18,18 @@ DEFAULT_CLOUD_SERVER = os.environ.get("LEIBNITZ_SERVER_URL", "https://leibnitz7-
 class SolarLLMClient:
     def __init__(self, endpoint_url: str = None):
         self.gguf_manager = GGUFModelManager()
+        self.provider_host = GGUFProviderHostManager()
         self.endpoint_url = endpoint_url or self.gguf_manager.get_server_endpoint()
 
     def get_active_model_info(self) -> dict:
-        return {
+        info = {
             'active_model': self.gguf_manager.get_active_model_name(),
             'model_path': self.gguf_manager.active_model_path,
             'endpoint_url': self.endpoint_url,
-            'discovered_models': self.gguf_manager.discovered_models
+            'discovered_models': self.gguf_manager.discovered_models,
+            'provider_host': self.provider_host.get_active_provider_info()
         }
+        return info
 
     def select_gguf_model(self, model_path: str):
         if self.gguf_manager.set_active_model(model_path):
@@ -34,14 +38,14 @@ class SolarLLMClient:
 
     def complete_code(self, prompt_text: str, timeout: float = 30.0) -> str:
         """
-        Send completion request to Solar AI Copilot.
+        Send completion request to Solar AI Copilot across multi-provider cloud GPU/RAM hosts.
         Prioritizes high-accuracy neural generation over speed (extended timeouts & max_tokens).
-        Priority 1: Direct Local llama-server Endpoint (Local GPU / Vulkan Solar GGUF).
-        Priority 2: Local Network Server Engine on Port 5006.
-        Priority 3: Centralized Cloud Server on Render (https://leibnitz6.onrender.com/api/copilot/complete).
-        Priority 4: Fallback Offline Suganita rule-based autocomplete engine.
+        Priority 1: Configured Cloud GPU Provider Host (RunPod / Vast.ai / E2E Networks with 64 GB RAM / RTX 4090/A100).
+        Priority 2: Direct Local llama-server Endpoint (Local GPU / Vulkan Solar GGUF).
+        Priority 3: Local Network Server Engine on Port 5006.
+        Priority 4: Centralized Cloud Server Gateway on Render.
+        Priority 5: Fallback Offline Suganita rule-based autocomplete engine.
         """
-        # Priority 1: Direct Local llama-server Endpoint (Local GPU / Vulkan Solar GGUF)
         payload = {
             "messages": [
                 {"role": "user", "content": build_completion_prompt(prompt_text)}
@@ -49,6 +53,18 @@ class SolarLLMClient:
             "max_tokens": 300,
             "temperature": 0.2
         }
+
+        # Priority 1: Configured Cloud GPU Provider Host
+        provider_info = self.provider_host.get_active_provider_info()
+        provider_endpoint = provider_info.get("active_endpoint")
+        if provider_endpoint:
+            data = self.provider_host.query_provider(provider_endpoint, payload, timeout=timeout)
+            if data and 'choices' in data and len(data['choices']) > 0:
+                content = data['choices'][0]['message']['content']
+                if content and content.strip():
+                    return content.strip()
+
+        # Priority 2: Direct Local llama-server Endpoint (Local GPU / Vulkan Solar GGUF)
         try:
             resp = requests.post(self.endpoint_url, json=payload, timeout=timeout)
             if resp.status_code == 200:
@@ -59,7 +75,7 @@ class SolarLLMClient:
         except Exception:
             pass
 
-        # Priority 2: Local Network Server Engine on Port 5006
+        # Priority 3: Local Network Server Engine on Port 5006
         try:
             net_resp = requests.post("http://127.0.0.1:5006/api/copilot/complete", json={"prompt": prompt_text}, timeout=timeout)
             if net_resp.status_code == 200:
@@ -69,7 +85,7 @@ class SolarLLMClient:
         except Exception:
             pass
 
-        # Priority 3: Cloud Server Centralized Copilot on Render
+        # Priority 4: Cloud Server Centralized Copilot on Render
         try:
             cloud_resp = requests.post(f"{DEFAULT_CLOUD_SERVER}/api/copilot/complete", json={"prompt": prompt_text}, timeout=timeout)
             if cloud_resp.status_code == 200:
@@ -79,7 +95,7 @@ class SolarLLMClient:
         except Exception:
             pass
 
-        # Priority 4: Fallback Offline Suganita Autocomplete Engine
+        # Priority 5: Fallback Offline Suganita Autocomplete Engine
         return self._generate_fallback_completion(prompt_text)
 
     def explain_code(self, code_snippet: str, timeout: float = 30.0) -> str:

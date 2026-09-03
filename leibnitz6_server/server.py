@@ -244,9 +244,49 @@ def copilot_complete():
     return jsonify({
         'status': 'SUCCESS',
         'completion': completion,
-        'model': 'Solar-10.7B-GGUF (Served by Leibnitz 6 Cloud Server)',
-        'server': 'Leibnitz6'
+        'model': 'Solar-10.7B-GGUF (Served by Leibnitz 7 Provider Host Manager)',
+        'server': 'Leibnitz7'
     })
+
+@app.route('/api/copilot/provider_status', methods=['GET'])
+def copilot_provider_status():
+    """
+    Returns active Solar GGUF cloud provider host info, RAM specs (64 GB burst tier), 
+    and pricing breakdown as specified in leibnitz7RAMv1.txt.
+    """
+    from solar_copilot.provider_host import GGUFProviderHostManager, PROVIDER_REGISTRY
+    manager = GGUFProviderHostManager()
+    return jsonify({
+        'status': 'SUCCESS',
+        'server': 'Leibnitz7',
+        'active_provider': manager.get_active_provider_info(),
+        'available_providers': PROVIDER_REGISTRY
+    })
+
+@app.route('/api/copilot/set_provider', methods=['POST'])
+def copilot_set_provider():
+    """
+    Switch active Solar GGUF cloud provider host at runtime (e.g. vast_ai, runpod, e2e_networks, aws_india, local_vulkan).
+    """
+    from solar_copilot.provider_host import GGUFProviderHostManager
+    data = request.get_json(force=True, silent=True) or {}
+    provider_key = data.get('provider_key')
+    endpoint = data.get('endpoint')
+    api_key = data.get('api_key')
+
+    manager = GGUFProviderHostManager()
+    success = manager.set_active_provider(provider_key, endpoint=endpoint, api_key=api_key)
+
+    if success:
+        return jsonify({
+            'status': 'SUCCESS',
+            'message': f"Active Solar GGUF provider switched to '{provider_key}'",
+            'provider_info': manager.get_active_provider_info()
+        })
+    return jsonify({
+        'status': 'ERROR',
+        'message': f"Invalid provider key '{provider_key}'. Valid keys: vast_ai, runpod, e2e_networks, aws_india, local_vulkan, render_cloud"
+    }), 400
 
 @app.route('/admin/dashboard', methods=['GET'])
 def admin_dashboard():
