@@ -510,7 +510,11 @@ async function runLiveThreatValidation() {
     btn.innerHTML = '⏳ SANDBOXED INGESTION &amp; 2D FFT SCANNING...';
 
     try {
-        const resp = await fetch('/api/security/hybrid_threat_validation', {
+        const apiUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+            ? '/api/security/hybrid_threat_validation' 
+            : 'https://leibnitz7.onrender.com/api/security/hybrid_threat_validation';
+
+        const resp = await fetch(apiUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ source: source, threat_type: threatType, mode: mode })
