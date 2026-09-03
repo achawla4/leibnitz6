@@ -184,6 +184,37 @@ def space_time_security_analysis():
     res['server'] = 'Leibnitz7'
     return jsonify(res)
 
+@app.route('/api/security/live_threat_test', methods=['POST'])
+def live_threat_test():
+    """
+    Live Test of Use Case Endpoint for Leibnitz 7.0.
+    Fetches botnet capture telemetry (Stratosphere CTU-13, URLhaus, Certstream, CISA AIS),
+    preprocesses signal streams, feeds to 2D Space-Time transform, and returns labeled Fourier signatures.
+    """
+    data = request.get_json(force=True, silent=True) or {}
+    source_key = data.get('source', 'stratosphere_ctu13')
+    threat_type = data.get('threat_type', 'c2_beaconing')
+
+    from leibnitz6_server.threat_feeds import fetch_and_preprocess_threat_feed
+    from suganita_engine.signal_adapter import SignalAdapter
+    import numpy as np
+
+    feed_res = fetch_and_preprocess_threat_feed(source_key=source_key, threat_type=threat_type)
+
+    adapter = SignalAdapter()
+    for rack_id, signal_y in feed_res['telemetry_matrix'].items():
+        t = np.linspace(0, 10, len(signal_y), endpoint=False)
+        adapter.signals[rack_id] = {'t': t, 'y': signal_y, 'sr': 100, 'channel': rack_id}
+
+    analysis_res = adapter.process_space_time_security_analysis(dataset_name=f"{source_key}_{threat_type}")
+    analysis_res['server'] = 'Leibnitz7'
+    analysis_res['threat_source'] = feed_res['source_name']
+    analysis_res['source_description'] = feed_res['description']
+    analysis_res['attack_vector'] = threat_type
+    analysis_res['fourier_signatures'] = feed_res['fourier_signatures']
+
+    return jsonify(analysis_res)
+
 @app.route('/api/transmit', methods=['POST'])
 def transmit():
     """Standard single-shot transmit request."""
