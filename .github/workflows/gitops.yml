@@ -20,9 +20,15 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
     - name: Run Security Audit (Bandit & Security Suite)
+      env:
+        PYTHONPATH: .
+        MPLBACKEND: Agg
       run: |
         python -m pytest tests/test_security_stack.py
     - name: Run Full Test Suite
+      env:
+        PYTHONPATH: .
+        MPLBACKEND: Agg
       run: |
         python -m pytest tests/
 
