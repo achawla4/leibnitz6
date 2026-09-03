@@ -7,7 +7,7 @@ Executes Suganita AST nodes, maintains stack/memory, and produces .su output pay
 from .parser import (
     ProgramNode, LiteralNode, PrintNode, PushNode, PopNode,
     AssignNode, FunctionCallNode, IfNode, PlotNode, MultiColumnNode,
-    JointAnalysisNode, BatchProcessNode, DelayNode, HaltNode, NopNode, ASTNode
+    JointAnalysisNode, BatchProcessNode, SpaceTimeSecurityNode, DelayNode, HaltNode, NopNode, ASTNode
 )
 from .signal_adapter import SignalAdapter
 
@@ -91,6 +91,14 @@ class SuganitaVM:
             batch_res = self.signal_adapter.batch_load_directory(str(dir_val))
             self.output_logs.append(f"[SANCHATMAKA] Batch ingested {len(batch_res)} CSV spreadsheets from directory '{dir_val}'")
             return batch_res
+
+        if isinstance(node, SpaceTimeSecurityNode):
+            ds_name = str(self._eval_node(node.target))
+            sec_res = self.signal_adapter.process_space_time_security_analysis(dataset_name=ds_name)
+            score = sec_res.get('hacker_footprint_anomaly_index', 0.0)
+            level = sec_res.get('threat_level', 'NORMAL')
+            self.output_logs.append(f"[ANTARIKSHASAMAYA] Executed 2D Space-Time Fourier Telemetry Defense [{ds_name}] - Hacker Anomaly Index: {score} ({level})")
+            return sec_res
 
         if isinstance(node, DelayNode):
             ms = self._eval_node(node.ms)

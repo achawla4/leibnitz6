@@ -152,6 +152,35 @@ class Leibnitz6Client:
             "plot_b64": b64_plot
         }
 
+    def space_time_security_analysis(self, csv_data: str = None, dataset_name: str = "haryana_datacenter_telemetry") -> Dict[str, Any]:
+        """
+        Execute 2D Space-Time Spectral Analysis for Haryana Data Center Telemetry Defense (sigsecurityv1.txt).
+        Detects covert hacker beaconing and botnet spatial synchronization footprints.
+        """
+        headers = {"X-Client-ID": self.client_id}
+        payload = {"csv_data": csv_data, "dataset_name": dataset_name}
+        try:
+            resp = requests.post(f"{self.server_url}/api/security/space_time_analysis", json=payload, headers=headers, timeout=10.0)
+            if resp.status_code == 200:
+                return resp.json()
+        except Exception:
+            pass
+
+        from suganita_engine.signal_adapter import SignalAdapter
+        import numpy as np
+        adapter = SignalAdapter()
+        if csv_data:
+            adapter.load_csv_signals(csv_data, dataset_name=dataset_name)
+        else:
+            for i in range(1, 9):
+                adapter.generate_synthetic_signal(f"node_rack_{i}", "sinusoidal", freq=10.0 + i*2)
+            t = adapter.signals['node_rack_3']['t']
+            adapter.signals['node_rack_3']['y'] += 2.5 * np.sin(2 * np.pi * 120.0 * t)
+
+        sec_res = adapter.process_space_time_security_analysis(dataset_name=dataset_name)
+        sec_res['status'] = 'OFFLINE_FALLBACK'
+        return sec_res
+
 Leibnitz7Client = Leibnitz6Client
 
 if __name__ == "__main__":

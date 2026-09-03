@@ -156,6 +156,34 @@ def joint_analysis():
         'plot_b64': plot_b64
     })
 
+@app.route('/api/security/space_time_analysis', methods=['POST'])
+def space_time_security_analysis():
+    """
+    Perform 2D Space-Time Spectral Analysis for Haryana Data Center Telemetry Defense (sigsecurityv1.txt).
+    Detects periodic hacker beaconing, covert channels, and synchronized botnet spatial footprints across server racks.
+    """
+    data = request.get_json(force=True, silent=True) or {}
+    csv_data = data.get('csv_data')
+    dataset_name = data.get('dataset_name', 'haryana_datacenter_telemetry')
+
+    from suganita_engine.signal_adapter import SignalAdapter
+    import numpy as np
+    adapter = SignalAdapter()
+
+    if csv_data:
+        adapter.load_csv_signals(csv_data, dataset_name=dataset_name)
+    else:
+        # Generate multi-node telemetry signals with simulated hacker beacon anomaly
+        for i in range(1, 9):
+            adapter.generate_synthetic_signal(f"node_rack_{i}", "sinusoidal", freq=10.0 + i*2)
+        # Inject periodic hacker beaconing anomaly into node_rack_3
+        t = adapter.signals['node_rack_3']['t']
+        adapter.signals['node_rack_3']['y'] += 2.5 * np.sin(2 * np.pi * 120.0 * t)
+
+    res = adapter.process_space_time_security_analysis(dataset_name=dataset_name)
+    res['server'] = 'Leibnitz7'
+    return jsonify(res)
+
 @app.route('/api/transmit', methods=['POST'])
 def transmit():
     """Standard single-shot transmit request."""

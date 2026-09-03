@@ -70,6 +70,7 @@ class TokenType(Enum):
     BAHUSTAMBHA = auto()     # बहुस्तम्भ (multi-column signal load)
     SAMYUKTA = auto()        # संयुक्त (joint analysis / cross-correlation)
     SANCHATMAKA = auto()     # संचात्मक (batch processing)
+    ANTARIKSHASAMAYA = auto() # अंतरिक्षसमय (space-time 2D fourier security analysis)
     
     # VM Stack Opcodes
     PRAVESHA = auto()       # प्रवेश (push)
@@ -124,6 +125,7 @@ DEVANAGARI_KEYWORDS = {
     'बहुस्तम्भ': TokenType.BAHUSTAMBHA,
     'संयुक्त': TokenType.SAMYUKTA,
     'संचात्मक': TokenType.SANCHATMAKA,
+    'अंतरिक्षसमय': TokenType.ANTARIKSHASAMAYA,
     'प्रवेश': TokenType.PRAVESHA,
     'विसर्जन': TokenType.VISARJANA,
     'पुनरावृत्ति': TokenType.PUNARAVRTTI,

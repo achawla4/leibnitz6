@@ -49,10 +49,11 @@ def run_interactive_repl(server_url: str = DEFAULT_SERVER_URL):
 
             if line.lower() == 'help':
                 print("\n  [Suganita Terminal Help — Leibnitz 7]")
-                print("  • Keyword Reference: लिखो, प्रवेश, विसर्जन, रुको, रूपरेखा, बहुस्तम्भ, संयुक्त, संचात्मक, निरोध, शु, यदि, अन्यथा")
+                print("  • Keyword Reference: लिखो, प्रवेश, विसर्जन, रुको, रूपरेखा, बहुस्तम्भ, संयुक्त, संचात्मक, अंतरिक्षसमय, निरोध, शु, यदि, अन्यथा")
                 print("  • Multi-Column CSV Load: बहुस्तम्भ 'data.csv'")
                 print("  • Joint Signal Analysis: संयुक्त 'Multi-Channel Analysis'")
                 print("  • Batch Directory Load:  संचात्मक 'signals_folder/'")
+                print("  • 2D Space-Time Security: अंतरिक्षसमय 'haryana_datacenter_telemetry'")
                 print("  • Solar AI Assist:       Type 'copilot <your query>'")
                 print("  • Multiline Code:        Enter lines, press Enter twice to evaluate.\n")
                 continue

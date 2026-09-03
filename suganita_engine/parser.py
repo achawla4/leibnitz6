@@ -96,6 +96,13 @@ class BatchProcessNode(ASTNode):
     def __repr__(self):
         return f"BatchProcessNode({self.target})"
 
+class SpaceTimeSecurityNode(ASTNode):
+    def __init__(self, target: ASTNode):
+        self.target = target
+
+    def __repr__(self):
+        return f"SpaceTimeSecurityNode({self.target})"
+
 class DelayNode(ASTNode):
     def __init__(self, ms: ASTNode):
         self.ms = ms
@@ -198,6 +205,12 @@ class Parser:
             expr = self._parse_expression()
             self._optional_terminator()
             return BatchProcessNode(expr)
+
+        # Space-Time 2D Fourier Security statement: अंतरिक्षसमय <dataset_expr>
+        if self._match(TokenType.ANTARIKSHASAMAYA):
+            expr = self._parse_expression()
+            self._optional_terminator()
+            return SpaceTimeSecurityNode(expr)
 
         # Delay / Ruko statement: रुको <ms>
         if self._match(TokenType.RUKO):

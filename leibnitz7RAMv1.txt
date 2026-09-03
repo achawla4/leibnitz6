@@ -1,0 +1,41 @@
+Break down what a **budget setup (₹800–₹1,600/month)** with **RTX 4090/A100 rentals + 64 GB RAM** actually means in practice for `.gguf` inference.  
+
+---
+
+## ⚙️ Why 64 GB RAM + RTX 4090/A100 Works
+- **System RAM**: 64 GB is enough to handle large batch sizes, caching, and multiple `.gguf` models without swapping.  
+- **GPU VRAM**: RTX 4090 (24 GB VRAM) or A100 (40 GB VRAM) can fit quantized 7B–70B models.  
+- **Inference speed**: With quantization (4‑bit/8‑bit), these GPUs deliver 20–60 tokens/sec — fast enough for interactive use.  
+- **Cost efficiency**: Renting short bursts (10–20 hrs/month) keeps costs within ₹800–₹1,600.  
+
+---
+
+## 💰 Cost Breakdown (India/Global Market 2026)
+
+| **Provider** | GPU | RAM | Price | Feasibility |
+|----------------|------|------|-------|-------------|
+| **E2E Networks** | L4/A100 | 64–128 GB | ₹49–₹219/hr | INR billing, Delhi NCR DC |
+| **RunPod** | A100 | 64 GB | ~$1.99/hr (~₹165/hr) | Community GPUs, spot pricing |
+| **Vast.ai** | RTX 4090 | 64 GB | ~$0.67/hr (~₹55/hr) | Lowest headline rates |
+| **AWS India** | G4dn/A100 | 64–128 GB | ₹150–₹300/hr | Stable but quota-limited |
+
+👉 At ~₹55–₹165/hr, **10–20 hrs/month** fits neatly into ₹800–₹1,600.  
+
+---
+
+## 🚀 Practical Usage Strategy
+- **Inference only**: Run quantized `.gguf` models (7B–70B) on RTX 4090/A100.  
+- **Short bursts**: Use cloud GPUs for heavy tasks (batch inference, evaluation).  
+- **Local fallback**: Keep a mid-range GPU (RTX 3060/4060) with 32 GB RAM for day-to-day testing.  
+- **Hybrid storage**: Store models locally (SSD) and load into cloud GPUs only when needed.  
+
+---
+
+## ⚠️ Trade-offs
+- **Not 24/7 hosting**: Budget only covers *occasional bursts*, not continuous serving.  
+- **Hidden costs**: Storage + bandwidth can push bills higher if unmanaged.  
+- **Scaling limits**: 70B inference is possible, but fine-tuning is unrealistic at this budget.  
+
+---
+
+👉 In short: **₹800–₹1,600/month buys you ~10–20 hrs of RTX 4090/A100 time with 64 GB RAM — enough for fast `.gguf` inference, but not for large-scale fine-tuning or production hosting.**  
