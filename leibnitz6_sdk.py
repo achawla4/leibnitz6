@@ -11,7 +11,7 @@ import requests
 import json
 from typing import Dict, Any, Generator, Optional
 
-DEFAULT_CLOUD_SERVER = os.environ.get("LEIBNITZ_SERVER_URL", "https://leibnitz6.onrender.com")
+DEFAULT_CLOUD_SERVER = os.environ.get("LEIBNITZ_SERVER_URL", "https://leibnitz7.onrender.com")
 
 class Leibnitz6Client:
     """
