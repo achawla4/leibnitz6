@@ -1,0 +1,48 @@
+{
+  "annotations": { "list": [] },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "title": "Leibnitz 6 Total Request Rate",
+      "type": "timeseries",
+      "targets": [
+        {
+          "expr": "rate(leibnitz6_requests_total[5m])",
+          "legendFormat": "Req/sec"
+        }
+      ]
+    },
+    {
+      "title": "FinOps Estimated Micro-Cost (USD)",
+      "type": "stat",
+      "targets": [
+        {
+          "expr": "leibnitz6_finops_cost_microcents / 1000000",
+          "legendFormat": "Cost USD"
+        }
+      ]
+    },
+    {
+      "title": "Solar-10.7B .gguf AI Copilot Tokens Processed",
+      "type": "timeseries",
+      "targets": [
+        {
+          "expr": "rate(leibnitz6_solar_gguf_tokens_total[5m])",
+          "legendFormat": "Tokens/sec"
+        }
+      ]
+    }
+  ],
+  "refresh": "5s",
+  "schemaVersion": 38,
+  "style": "dark",
+  "tags": ["leibnitz6", "prometheus", "opentelemetry", "finops"],
+  "time": { "from": "now-6h", "to": "now" },
+  "title": "Leibnitz 6.0 Enterprise Observability & FinOps Dashboard",
+  "version": 1
+}

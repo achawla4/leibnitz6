@@ -1,0 +1,13 @@
+# Suganita Signal Processing Script - signal1.su
+# Leibnitz6 Platform - Nyaya Logic & Spectral Filter
+
+लिखो "REALInstitute"
+लिखो "Leibnitz6_Signal_Processor"
+लिखो "Sinusoidal_12Hz_Transmission"
+
+प्रवेश "Input_Signal_Buffer_12Hz"
+प्रवेश "Parameters_Sampling_1000Hz"
+
+रुको ५००
+रूपरेखा "Sinusoidal_12Hz_Spectral_Analysis"
+निरोध
