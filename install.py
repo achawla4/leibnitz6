@@ -67,16 +67,16 @@ def run_remote_installation():
     with open(repl_bat, 'w', encoding='utf-8') as f:
         f.write(f'@echo off\nset PYTHONPATH={target_dir};%PYTHONPATH%\ncd /d "{target_dir}"\n"{sys.executable}" -m leibnitz6_server.cli\npause\n')
 
-    # Linux/macOS Client Launcher (GUI)
-    with open(notepad_sh, 'w', encoding='utf-8') as f:
+    # Linux/macOS Client Launcher (GUI) with Unix LF line endings
+    with open(notepad_sh, 'w', encoding='utf-8', newline='\n') as f:
         f.write(f'#!/usr/bin/env bash\nexport PYTHONPATH="{target_dir}:$PYTHONPATH"\ncd "{target_dir}"\n"{sys.executable}" -m structured_notepad_ext.notepad_app\n')
     try:
         os.chmod(notepad_sh, 0o755)
     except Exception:
         pass
 
-    # Linux/macOS Terminal REPL Launcher (CLI)
-    with open(repl_sh, 'w', encoding='utf-8') as f:
+    # Linux/macOS Terminal REPL Launcher (CLI) with Unix LF line endings
+    with open(repl_sh, 'w', encoding='utf-8', newline='\n') as f:
         f.write(f'#!/usr/bin/env bash\nexport PYTHONPATH="{target_dir}:$PYTHONPATH"\ncd "{target_dir}"\n"{sys.executable}" -m leibnitz6_server.cli\n')
     try:
         os.chmod(repl_sh, 0o755)
