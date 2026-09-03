@@ -25,7 +25,10 @@ def run_remote_installation():
             __import__(pkg)
         except ImportError:
             print(f"  [+] Installing {pkg}...")
-            subprocess.check_call([sys.executable, "-m", "pip", "install", pkg])
+            try:
+                subprocess.check_call([sys.executable, "-m", "pip", "install", "--user", pkg])
+            except subprocess.CalledProcessError:
+                subprocess.check_call([sys.executable, "-m", "pip", "install", "--user", "--break-system-packages", pkg])
     print("  [OK] Dependencies verified.")
 
     # 2. Connect to Centralized Cloud Server on Render
