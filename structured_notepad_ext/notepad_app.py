@@ -9,9 +9,12 @@ import sys
 import os
 import io
 import json
-import base64
-import tkinter as tk
-from tkinter import ttk, filedialog, messagebox
+try:
+    import tkinter as tk
+    from tkinter import ttk, filedialog, messagebox
+except ImportError:
+    tk = None
+    ttk = filedialog = messagebox = None
 from PIL import Image, ImageTk
 
 # Import workspace components
