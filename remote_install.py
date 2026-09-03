@@ -48,6 +48,28 @@ def run_remote_installation():
         possible_root = os.path.join(cwd, "REALWeb", "Leibnitz6")
         if os.path.exists(possible_root):
             target_dir = possible_root
+        else:
+            # Download Leibnitz 6 client modules automatically if running in empty directory
+            print("  [+] Remote machine environment detected. Downloading Leibnitz 6 client modules...")
+            try:
+                zip_url = "https://github.com/achawla4/leibnitz6/archive/refs/heads/main.zip"
+                req = urllib.request.Request(zip_url, headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'})
+                zip_path = os.path.join(cwd, "leibnitz6_main.zip")
+                with urllib.request.urlopen(req) as resp, open(zip_path, 'wb') as out_f:
+                    out_f.write(resp.read())
+                
+                import zipfile
+                with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+                    zip_ref.extractall(cwd)
+                
+                extracted_dir = os.path.join(cwd, "leibnitz6-main")
+                if os.path.exists(extracted_dir):
+                    target_dir = extracted_dir
+                if os.path.exists(zip_path):
+                    os.remove(zip_path)
+                print("  [OK] Client modules downloaded and configured successfully.")
+            except Exception as err:
+                print(f"  [!] Notice: Module auto-download error ({err}).")
 
     if target_dir not in sys.path:
         sys.path.insert(0, target_dir)
