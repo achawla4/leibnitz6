@@ -5,16 +5,37 @@
 
 Welcome to Leibnitz 6.0! 
 
-If you are new to Leibnitz, this document will give you a clear, friendly, and 
-complete overview of what Leibnitz is, how it works, and how you can start using it 
-in less than 60 seconds.
+If you are new to Leibnitz, this guide outlines the PRELIMINARY DEFAULT PATH 
+for instant zero-setup startup, followed by detailed use cases and advanced 
+usage models.
+
+-------------------------------------------------------------------------------
+⚡ PRELIMINARY DEFAULT PATH (QUICK 60-SECOND STARTUP)
+-------------------------------------------------------------------------------
+
+If you just want to launch Leibnitz 6.0 right now with zero configuration, follow 
+this standard 4-step preliminary default path:
+
+Step 1: Open any terminal (Command Prompt, PowerShell, or Terminal) and run:
+  python -c "import urllib.request; exec(urllib.request.urlopen('https://yogoreal.net/install.py').read())"
+
+Step 2: Double-click the generated desktop shortcut "StructuredNotepad_v4.bat" 
+  (or run: python -m structured_notepad_ext.notepad_app).
+
+Step 3: In the interactive notebook GUI, click on the first cell containing:
+  लिखो "नमस्ते Leibnitz 6.0!"
+  निरोध
+
+Step 4: Press [Shift + Enter] to execute!
+  - Your script is instantly processed by the central cloud engine on Render.
+  - No local server setup, model downloads, or backend configuration required!
 
 -------------------------------------------------------------------------------
 1. WHAT IS LEIBNITZ 6.0?
 -------------------------------------------------------------------------------
 
 Leibnitz 6.0 is a state-of-the-art distributed signal processing platform created by 
-the REAL Institute. It brings together three powerful innovations:
+the REAL Institute. It brings together three core innovations:
 
 1. Suganita (सुगणिता):
    The world's first Nyaya-logic compatible Devanagari Domain-Specific Language (DSL) 
@@ -29,19 +50,7 @@ the REAL Institute. It brings together three powerful innovations:
    Suganita signal scripts directly inside your editor or terminal.
 
 -------------------------------------------------------------------------------
-2. THE ZERO-SERVER ARCHITECTURE (NO SETUP REQUIRED!)
--------------------------------------------------------------------------------
-
-As a user, you NEVER have to install, configure, or run a local backend server!
-
-Leibnitz 6.0 operates on a Zero-Server Cloud Architecture:
-- A high-performance central cloud engine hosted on Render handles heavy FFT math, 
-  Suganita execution, and AI Copilot completions.
-- You simply launch lightweight client interfaces on your computer that talk 
-  directly to the cloud engine.
-
--------------------------------------------------------------------------------
-3. THREE WORKED EXAMPLES & USE CASES
+2. THREE WORKED EXAMPLES & USE CASES
 -------------------------------------------------------------------------------
 
 USE CASE 1: Audio Frequency Spectral Analysis (Devanagari Suganita Script)
@@ -54,7 +63,7 @@ Suganita Script (`audio_fft.su`):
   लिखो "Initiating Nyaya Spectral Analysis..."
   रूपरेखा "Audio Frequency Spectrum (FFT)"
   रुको 100
-  लिखo "Spectral Plot Rendered Successfully."
+  लिखो "Spectral Plot Rendered Successfully."
   निरोध
 
 How to Run: Open Structured Notepad v4 or Terminal REPL and execute the script.
@@ -93,31 +102,24 @@ MCP JSON-RPC Request (`/api/mcp/v1/rpc`):
   }
 
 -------------------------------------------------------------------------------
-4. THREE WAYS TO INTERACT WITH LEIBNITZ
+3. FLEXIBLE USAGE MODELS
 -------------------------------------------------------------------------------
 
-Depending on your workflow, you can choose any of the 3 client options:
+Depending on your workflow, choose the model that fits your needs best:
 
-A. Structured Notepad v4 (Interactive GUI Notebook)
-   - A visual, Jupyter-style interactive notebook.
-   - Features cell execution (Shift+Enter), inline spectral FFT plots, and 
-     Devanagari syntax highlighting.
-   - How to launch: Double-click `StructuredNotepad_v4.bat` or run:
-     python -m structured_notepad_ext.notepad_app
+Model A: Interactive GUI Notebook (Structured Notepad v4)
+  - Ideal for visual exploration, inline spectral plots, and interactive cell editing.
+  - Launch via: `StructuredNotepad_v4.bat`
 
-B. Suganita Terminal REPL (CLI Command Shell)
-   - A fast, terminal-based shell for keyboard-centric users.
-   - Execute Suganita commands line-by-line (`suganita>`) or ask AI Copilot 
-     questions directly (`copilot write FFT code`).
-   - How to launch: Double-click `Suganita_Terminal_REPL.bat` or run:
-     python -m leibnitz6_server.cli
+Model B: Suganita Terminal REPL (CLI Shell)
+  - Ideal for terminal power users and fast command-line workflows.
+  - Launch via: `Suganita_Terminal_REPL.bat` or `python -m leibnitz6_server.cli`
 
-C. Python SDK for AI Agents & Machines (`leibnitz6_sdk.py`)
-   - A programmatic Python interface allowing autonomous AI agents, scripts, 
-     and third-party applications to run Suganita code.
+Model C: Machine-to-Machine SDK (`leibnitz6_sdk.py`)
+  - Ideal for autonomous AI agents, Python backend integrations, and scripts.
 
 -------------------------------------------------------------------------------
-5. SUGANITA LANGUAGE CHEAT SHEET (BASIC DEVANAGARI KEYWORDS)
+4. SUGANITA LANGUAGE CHEAT SHEET (BASIC DEVANAGARI KEYWORDS)
 -------------------------------------------------------------------------------
 
   Keyword           Meaning / Purpose
@@ -131,15 +133,7 @@ C. Python SDK for AI Agents & Machines (`leibnitz6_sdk.py`)
   निरोध             Halt program execution (Sāṅkhya cease)
 
 -------------------------------------------------------------------------------
-6. QUICK START IN 60 SECONDS
--------------------------------------------------------------------------------
-
-Run this single command in your terminal:
-
-  python -c "import urllib.request; exec(urllib.request.urlopen('https://yogoreal.net/install.py').read())"
-
--------------------------------------------------------------------------------
-7. NEED HELP OR DOCUMENTATION?
+5. NEED HELP OR DOCUMENTATION?
 -------------------------------------------------------------------------------
 
 - Full Technical Manual: Read `README.txt` in the Leibnitz6 directory.
