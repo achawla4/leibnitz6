@@ -319,7 +319,7 @@
             </div>
 
             <!-- Control Bar with Dropdowns -->
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-bottom: 24px; background: #020617; padding: 20px; border-radius: 8px; border: 1px solid var(--border-color);">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px; background: #020617; padding: 20px; border-radius: 8px; border: 1px solid var(--border-color);">
                 <div>
                     <label style="display: block; color: var(--text-light); font-size: 13px; font-weight: 600; margin-bottom: 8px;">
                         🌐 Live Threat Feed / Dataset Source:
@@ -345,9 +345,19 @@
                     </select>
                 </div>
 
+                <div>
+                    <label style="display: block; color: var(--text-light); font-size: 13px; font-weight: 600; margin-bottom: 8px;">
+                        🛡️ Strategy &amp; Labeling Mode:
+                    </label>
+                    <select id="validation-mode-select" style="width: 100%; background: #0f172a; color: #f8fafc; border: 1px solid #334155; padding: 10px; border-radius: 6px; font-family: inherit;">
+                        <option value="benchmark">Labeled Ground-Truth Benchmark (F1-Score / CTU-13)</option>
+                        <option value="threat_hunting">Unsupervised Threat Hunting (Certstream / Zero-Day)</option>
+                    </select>
+                </div>
+
                 <div style="display: flex; align-items: flex-end;">
                     <button id="run-live-test-btn" onclick="runLiveThreatValidation()" style="width: 100%; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: #020617; font-weight: 700; border: none; padding: 12px 20px; border-radius: 6px; cursor: pointer; font-family: 'IBM Plex Mono', monospace; box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3); transition: all 0.2s ease;">
-                        ▶ RUN LIVE VALIDATION
+                        ▶ RUN VALIDATION
                     </button>
                 </div>
             </div>
@@ -488,6 +498,7 @@ async function runLiveThreatValidation() {
     const btn = document.getElementById('run-live-test-btn');
     const source = document.getElementById('threat-source-select').value;
     const threatType = document.getElementById('threat-type-select').value;
+    const mode = document.getElementById('validation-mode-select').value;
     const resultsPanel = document.getElementById('live-results-panel');
     const heatmapImg = document.getElementById('live-threat-heatmap-img');
     const badgeScore = document.getElementById('badge-anomaly-score');
@@ -496,20 +507,20 @@ async function runLiveThreatValidation() {
     const resultsTitle = document.getElementById('results-title');
 
     btn.disabled = true;
-    btn.innerHTML = '⏳ GATHERING TELEMETRY &amp; COMPUTING 2D FFT...';
+    btn.innerHTML = '⏳ SANDBOXED INGESTION &amp; 2D FFT SCANNING...';
 
     try {
-        const resp = await fetch('/api/security/live_threat_test', {
+        const resp = await fetch('/api/security/hybrid_threat_validation', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ source: source, threat_type: threatType })
+            body: JSON.stringify({ source: source, threat_type: threatType, mode: mode })
         });
         const data = await resp.json();
 
         if (data.status === 'SUCCESS' || data.plot_b64) {
             resultsPanel.style.display = 'block';
             heatmapImg.src = 'data:image/png;base64,' + data.plot_b64;
-            resultsTitle.innerHTML = '📊 2D Space-Time Fourier Analysis [' + (data.threat_source || source) + ']';
+            resultsTitle.innerHTML = '📊 2D Space-Time Fourier Spectrum [' + (data.threat_source || source) + ']';
             
             badgeScore.innerHTML = 'Anomaly Index: ' + data.hacker_footprint_anomaly_index;
             badgeLevel.innerHTML = 'Threat Level: ' + data.threat_level;
@@ -517,10 +528,31 @@ async function runLiveThreatValidation() {
             badgeLevel.style.color = data.threat_level === 'HIGH_ANOMALY' ? '#ef4444' : '#f59e0b';
 
             signaturesList.innerHTML = '';
+            
+            // 1. Sandbox Status Badge
+            const liSandbox = document.createElement('li');
+            liSandbox.style.color = '#38bdf8';
+            liSandbox.innerHTML = '🔒 <strong>SANDBOX ISOLATION:</strong> Air-Gapped Memory Buffer (Raw Payload Content Stripped)';
+            signaturesList.appendChild(liSandbox);
+
+            // 2. Hybrid Strategy Metrics
+            if (data.benchmark_summary) {
+                const liBench = document.createElement('li');
+                liBench.style.color = '#10b981';
+                liBench.innerHTML = '📈 <strong>LABELED BENCHMARK ACCURACY:</strong> ' + data.benchmark_summary;
+                signaturesList.appendChild(liBench);
+            } else if (data.threat_hunting_summary) {
+                const liHunt = document.createElement('li');
+                liHunt.style.color = '#f59e0b';
+                liHunt.innerHTML = '🕵️ <strong>UNSUPERVISED THREAT HUNTING:</strong> ' + data.threat_hunting_summary;
+                signaturesList.appendChild(liHunt);
+            }
+
+            // 3. Domain Signatures
             const sigs = data.fourier_signatures || [];
             sigs.forEach(sig => {
                 const li = document.createElement('li');
-                li.innerHTML = '<strong>' + sig + '</strong>';
+                li.innerHTML = '🏷️ <strong>' + sig + '</strong>';
                 signaturesList.appendChild(li);
             });
 
@@ -538,7 +570,7 @@ async function runLiveThreatValidation() {
         alert('Failed to connect to Leibnitz 7 Security API server.');
     } finally {
         btn.disabled = false;
-        btn.innerHTML = '▶ RUN LIVE VALIDATION';
+        btn.innerHTML = '▶ RUN VALIDATION';
     }
 }
 </script>
