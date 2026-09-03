@@ -5,16 +5,17 @@
 
 Welcome to Leibnitz 6.0! 
 
-If you are new to Leibnitz, this guide outlines the UNIVERSAL PRELIMINARY DEFAULT PATH 
-for instant zero-setup startup across Windows, Linux, and macOS.
+If you are new to Leibnitz, this guide outlines the PRELIMINARY DEFAULT PATH 
+for instant zero-setup startup on Linux, Windows, and macOS, followed by detailed 
+use cases and advanced usage models.
 
 -------------------------------------------------------------------------------
-⚡ UNIVERSAL PRELIMINARY DEFAULT PATH (QUICK 60-SECOND STARTUP)
+⚡ PRELIMINARY DEFAULT PATH (INDEPENDENT LINUX & CROSS-PLATFORM STARTUP)
 -------------------------------------------------------------------------------
 
-Follow this standard 4-step preliminary path on ANY operating system:
+Follow this standard 4-step path on any Linux, macOS, or Windows machine:
 
-Step 1: Open your terminal (Command Prompt, PowerShell, or Terminal) and run:
+Step 1: Open your Terminal (or Command Prompt) and run the installer:
 
   For Linux / macOS:
   python3 -c "import urllib.request; req=urllib.request.Request('https://leibnitz6.onrender.com/install.py', headers={'User-Agent': 'Mozilla/5.0'}); exec(urllib.request.urlopen(req).read())"
@@ -22,26 +23,35 @@ Step 1: Open your terminal (Command Prompt, PowerShell, or Terminal) and run:
   For Windows:
   python -c "import urllib.request; req=urllib.request.Request('https://leibnitz6.onrender.com/install.py', headers={'User-Agent': 'Mozilla/5.0'}); exec(urllib.request.urlopen(req).read())"
 
-  [Notes on Universal Execution]:
-  - From Any Directory: The one-liners above download and launch Leibnitz 6 automatically on any system (no local repo required).
-  - Alternative Web Endpoint: Also hosted at https://yogoreal.net/install.py
-  - Local Repository Users: If you have already cloned the Leibnitz6 folder locally, simply run:
-      python install.py       (Windows)
+  [Notes for Independent Machines & Local Workspaces]:
+  - Run From Any Directory: Works on blank systems without downloading local repository files first.
+  - If Cloned Locally: If you already have the files locally, simply run:
       python3 install.py      (Linux / macOS)
+      python install.py       (Windows)
 
-Step 2: Launch the Structured Notepad v4 GUI:
-  - On Windows: Double-click "StructuredNotepad_v4.bat"
-  - On Linux / macOS: Run in terminal:
-      ./StructuredNotepad_v4.sh
-      (or direct command: PYTHONPATH="$(pwd):$PYTHONPATH" python3 -m structured_notepad_ext.notepad_app)
+Step 2: Launch the Client Interface:
 
-Step 3: In the interactive notebook GUI, click on the first cell containing:
+  Option A (GUI Notebook):
+    - Linux / macOS:  ./StructuredNotepad_v4.sh
+                      (or direct command: PYTHONPATH="$(pwd):$PYTHONPATH" python3 -m structured_notepad_ext.notepad_app)
+    - Windows:        Double-click "StructuredNotepad_v4.bat"
+
+  Option B (Terminal REPL CLI):
+    - Linux / macOS:  ./Suganita_Terminal_REPL.sh
+                      (or direct command: PYTHONPATH="$(pwd):$PYTHONPATH" python3 -m leibnitz6_server.cli)
+    - Windows:        Double-click "Suganita_Terminal_REPL.bat"
+
+Step 3: In the notebook GUI or terminal REPL, type your first Suganita script:
+
   लिखो "नमस्ते Leibnitz 6.0!"
   निरोध
 
-Step 4: Press [Shift + Enter] to execute!
-  - Your script is instantly processed by the central cloud engine on Render.
-  - No local server setup, model downloads, or backend configuration required!
+Step 4: Execute the script:
+  - In GUI Notebook: Press [Shift + Enter]
+  - In Terminal REPL: Press [Enter]
+  
+  (Your script is processed live by the central cloud engine on Render. No local 
+   server setup, model downloads, or backend configuration required!)
 
 -------------------------------------------------------------------------------
 1. WHAT IS LEIBNITZ 6.0?
@@ -122,13 +132,13 @@ Depending on your workflow, choose the model that fits your needs best:
 
 Model A: Interactive GUI Notebook (Structured Notepad v4)
   - Ideal for visual exploration, inline spectral plots, and interactive cell editing.
-  - Windows: `StructuredNotepad_v4.bat`
   - Linux / macOS: `./StructuredNotepad_v4.sh` or `PYTHONPATH="$(pwd):$PYTHONPATH" python3 -m structured_notepad_ext.notepad_app`
+  - Windows: `StructuredNotepad_v4.bat`
 
 Model B: Suganita Terminal REPL (CLI Shell)
   - Ideal for terminal power users and fast command-line workflows.
-  - Windows: `Suganita_Terminal_REPL.bat`
   - Linux / macOS: `./Suganita_Terminal_REPL.sh` or `PYTHONPATH="$(pwd):$PYTHONPATH" python3 -m leibnitz6_server.cli`
+  - Windows: `Suganita_Terminal_REPL.bat`
 
 Model C: Machine-to-Machine SDK (`leibnitz6_sdk.py`)
   - Ideal for autonomous AI agents, Python backend integrations, and scripts.
