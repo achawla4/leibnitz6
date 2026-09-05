@@ -38,22 +38,6 @@ class SolarLLMClient:
 
     def complete_code(self, prompt_text: str, timeout: float = 30.0) -> str:
         """
-        Send completion request to Solar AI Copilot across multi-provider cloud GPU/RAM hosts.
-        Prioritizes high-accuracy neural generation over speed (extended timeouts & max_tokens).
-        Priority 1: Configured Cloud GPU Provider Host (RunPod / Vast.ai / E2E Networks with 64 GB RAM / RTX 4090/A100).
-        Priority 2: Direct Local llama-server Endpoint (Local GPU / Vulkan Solar GGUF).
-        Priority 3: Local Network Server Engine on Port 5006.
-        Priority 4: Centralized Cloud Server Gateway on Render.
-        Priority 5: Fallback Offline Suganita rule-based autocomplete engine.
-        """
-        payload = {
-            "messages": [
-                {"role": "user", "content": build_completion_prompt(prompt_text)}
-            ],
-            "max_tokens": 300,
-            "temperature": 0.2
-        }
-
         # Priority 1: Configured Cloud GPU Provider Host
         provider_info = self.provider_host.get_active_provider_info()
         provider_endpoint = provider_info.get("active_endpoint")
@@ -96,6 +80,7 @@ class SolarLLMClient:
             pass
 
         # Priority 5: Fallback Offline Suganita Autocomplete Engine
+
         return self._generate_fallback_completion(prompt_text)
 
     def explain_code(self, code_snippet: str, timeout: float = 30.0) -> str:

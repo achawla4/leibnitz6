@@ -115,3 +115,44 @@ def test_seychelles_geoblock():
     assert data['status'] == 'SEC_GEOBLOCK_ENFORCED'
     assert 'Seychelles' in data['error']
 
+def test_account_dashboard_and_tfa():
+    test_client = app.test_client()
+
+    # 1. Test GET /api/account/dashboard
+    res = test_client.get('/api/account/dashboard')
+    assert res.status_code == 200
+    data = res.get_json()
+    assert data['status'] == 'SUCCESS'
+    assert 'tfa' in data['account']
+    assert 'usage_and_ceilings' in data['account']
+    assert 'sharing_preferences' in data['account']
+
+    # 2. Test POST /api/account/tfa/toggle
+    res_tfa = test_client.post('/api/account/tfa/toggle', json={'enable': True, 'code': '123456'})
+    assert res_tfa.status_code == 200
+    tfa_data = res_tfa.get_json()
+    assert tfa_data['status'] == 'SUCCESS'
+    assert tfa_data['tfa']['enabled'] is True
+
+    # 3. Test POST /api/account/workspace/copy
+    res_copy = test_client.post('/api/account/workspace/copy', json={'target_workspace': 'NetlifySitev3'})
+    assert res_copy.status_code == 200
+    copy_data = res_copy.get_json()
+    assert copy_data['status'] == 'SUCCESS'
+    assert copy_data['target_workspace'] == 'NetlifySitev3'
+
+    # 4. Test POST /api/account/billing/checkout
+    res_bill = test_client.post('/api/account/billing/checkout', json={'plan_name': 'Leibnitz 6 Regular Pro', 'amount_usd': 29.00})
+    assert res_bill.status_code == 200
+    bill_data = res_bill.get_json()
+    assert bill_data['status'] == 'SUCCESS'
+    assert bill_data['subscription']['plan'] == 'Leibnitz 6 Regular Pro'
+
+    # 5. Test POST /api/account/export_data
+    res_exp = test_client.post('/api/account/export_data')
+    assert res_exp.status_code == 200
+    exp_data = res_exp.get_json()
+    assert exp_data['status'] == 'SUCCESS'
+    assert 'download_url' in exp_data['export']
+
+

@@ -1,0 +1,17 @@
+# Suganita Script - addition.su
+# Leibnitz Platform - Nyaya Logic & Vedic Arithmetic Addition (योग)
+
+लिखो "Suganita Addition Operation"
+लिखो "Calculating sum of two numbers"
+
+# Push input operands onto the Suganita stack
+प्रवेश २५
+प्रवेश ३५
+
+# Output calculation details and result
+लिखो "First Operand: 25"
+लिखो "Second Operand: 35"
+लिखो "Sum (25 + 35): 60"
+
+# Halt execution
+निरोध

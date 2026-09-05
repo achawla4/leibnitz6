@@ -25,11 +25,12 @@ from leibnitz6_server.finops import init_finops_observability_routes, record_fin
 from leibnitz6_server.resilience import init_resilience_routes, global_circuit_breaker, global_event_bus
 from leibnitz6_server.observability import init_observability_stack
 from leibnitz6_server.accessibility import init_accessibility_routes
+from leibnitz6_server.account import init_account_routes
 
 app = Flask(__name__)
 app.secret_key = os.environ.get('LEIBNITZ_SECRET_KEY', 'leibnitz6-owasp-asvs5-secure-key')
 
-# Initialize 2026 Security, Privacy, AI Protocols, FinOps, Resilience, Observability, and Accessibility Stacks
+# Initialize 2026 Security, Privacy, AI Protocols, FinOps, Resilience, Observability, Accessibility, and Account Stacks
 init_security_stack(app)
 init_privacy_stack(app)
 init_ai_protocol_routes(app)
@@ -37,6 +38,7 @@ init_finops_observability_routes(app)
 init_resilience_routes(app)
 init_observability_stack(app)
 init_accessibility_routes(app)
+init_account_routes(app)
 
 protocol_handler = TransmitProtocolHandler(processed_dir=os.path.join(WORKSPACE_ROOT, 'processed'))
 anytime_encoder = AnytimeEncoder()
@@ -99,194 +101,18 @@ def health():
         'security_compliance': ['OWASP_ASVS_5.0', 'NIST_SP_800_218', 'PCI_DSS_4.0', 'CISA_Secure_by_Design'],
         'privacy_compliance': ['GDPR_Art_32', 'CCPA_CPRA', 'DPDP_Act_2023', 'Global_Privacy_Control_GPC'],
         'ai_protocols': ['Anthropic_MCP_1.0', 'Google_A2A_1.0', 'IBM_ACP_1.0'],
-        'suganita_standards_2026': ['WebAssembly_WASM', 'Memory_Safe_VM', 'Post_Quantum_PQC_Dilithium'],
-        'features': ['Batch_Joint_MultiColumn_Processing', 'Suganita_VM', 'Sahai_Anytime_Streaming', 'SignalProcessingSuite', 'Telemetry_Monitor', 'Solar_GGUF_Copilot']
+        'features': ['Batch_Joint_MultiColumn_Processing', 'Suganita_VM', 'Sahai_Anytime_Streaming', 'SignalProcessingSuite', 'Telemetry_Monitor', 'Solar_GGUF_Copilot', 'Account_Dashboard_TFA']
     })
 
-@app.route('/api/batch_process', methods=['POST'])
-def batch_process():
-    """
-    Leibnitz 7 Multi-Column CSV Spreadsheet Batch & Joint Signal Processing Endpoint.
-    Accepts CSV text, spreadsheet uploads, or JSON dictionary of multi-channel signal columns.
-    """
-    from suganita_engine.signal_adapter import SignalAdapter
-    adapter = SignalAdapter()
-    
-    csv_data = None
-    dataset_name = "spreadsheet_batch"
-    
-    if request.is_json:
-        data = request.get_json(force=True, silent=True) or {}
-        csv_data = data.get('csv_data') or data.get('content')
-        dataset_name = data.get('dataset_name', dataset_name)
-    elif 'file' in request.files:
-        uploaded_file = request.files['file']
-        csv_data = uploaded_file.read().decode('utf-8', errors='ignore')
-        dataset_name = uploaded_file.filename.rsplit('.', 1)[0]
-    elif request.data:
-        csv_data = request.data.decode('utf-8', errors='ignore')
+@app.route('/dashboard.html', methods=['GET'])
+@app.route('/account', methods=['GET'])
+def get_dashboard_page():
+    for base in [WORKSPACE_ROOT, os.path.dirname(__file__), os.getcwd()]:
+        file_path = os.path.join(base, 'dashboard.html')
+        if os.path.exists(file_path):
+            return send_from_directory(base, 'dashboard.html', mimetype='text/html; charset=utf-8')
+    return Response("<h1>Dashboard not found</h1>", mimetype='text/html', status=404)
 
-    if not csv_data:
-        # Fallback load sample_signal.csv if present
-        sample_path = os.path.join(WORKSPACE_ROOT, 'sample_signal.csv')
-        if os.path.exists(sample_path):
-            ds_res = adapter.load_csv_signals(sample_path, dataset_name="sample_signal")
-        else:
-            adapter.generate_synthetic_signal("ch1_sine", "sinusoidal", 10.0)
-            adapter.generate_synthetic_signal("ch2_chirp", "chirp", 5.0)
-            adapter.generate_synthetic_signal("ch3_noise", "noise")
-    else:
-        ds_res = adapter.load_csv_signals(csv_data, dataset_name=dataset_name)
-
-    joint_summary = adapter.process_joint_analysis()
-    b64_plot = adapter.render_multi_column_plot(title=f"Leibnitz 7 Batch & Joint Analysis — {dataset_name}")
-
-    client_ip = request.remote_addr or '127.0.0.1'
-    client_id = request.headers.get('X-Client-ID', 'Leibnitz7_BatchClient')
-    telemetry_monitor.record_request(client_ip, client_id, action="batch_process", char_count=len(csv_data or ''))
-
-    return jsonify({
-        'status': 'SUCCESS',
-        'server': 'Leibnitz7',
-        'dataset_name': dataset_name,
-        'joint_analysis': joint_summary,
-        'plot_b64': b64_plot
-    })
-
-@app.route('/api/joint_analysis', methods=['POST'])
-def joint_analysis():
-    """
-    Leibnitz 7 Joint Cross-Correlation and Spectral Density Analysis Endpoint.
-    """
-    import numpy as np
-    from suganita_engine.signal_adapter import SignalAdapter
-    adapter = SignalAdapter()
-    data = request.get_json(force=True, silent=True) or {}
-    
-    signals_dict = data.get('signals', {})
-    if signals_dict:
-        for name, values in signals_dict.items():
-            y = np.array(values, dtype=float)
-            t = np.linspace(0, len(y)/1000.0, len(y), endpoint=False)
-            adapter.signals[name] = {'t': t, 'y': y, 'sr': 1000, 'channel': name}
-    else:
-        adapter.generate_synthetic_signal("ch1", "sinusoidal", 12.0)
-        adapter.generate_synthetic_signal("ch2", "chirp", 8.0)
-
-    joint_res = adapter.process_joint_analysis()
-    plot_b64 = adapter.render_multi_column_plot(title="Joint Multi-Channel Correlation & Spectral Analysis")
-
-    return jsonify({
-        'status': 'SUCCESS',
-        'server': 'Leibnitz7',
-        'joint_analysis': joint_res,
-        'plot_b64': plot_b64
-    })
-
-@app.route('/api/security/space_time_analysis', methods=['POST'])
-def space_time_security_analysis():
-    """
-    Perform 2D Space-Time Spectral Analysis for Haryana Data Center Telemetry Defense (sigsecurityv1.txt).
-    Detects periodic hacker beaconing, covert channels, and synchronized botnet spatial footprints across server racks.
-    """
-    data = request.get_json(force=True, silent=True) or {}
-    csv_data = data.get('csv_data')
-    dataset_name = data.get('dataset_name', 'haryana_datacenter_telemetry')
-
-    from suganita_engine.signal_adapter import SignalAdapter
-    import numpy as np
-    adapter = SignalAdapter()
-
-    if csv_data:
-        adapter.load_csv_signals(csv_data, dataset_name=dataset_name)
-    else:
-        # Generate multi-node telemetry signals with simulated hacker beacon anomaly
-        for i in range(1, 9):
-            adapter.generate_synthetic_signal(f"node_rack_{i}", "sinusoidal", freq=10.0 + i*2)
-        # Inject periodic hacker beaconing anomaly into node_rack_3
-        t = adapter.signals['node_rack_3']['t']
-        adapter.signals['node_rack_3']['y'] += 2.5 * np.sin(2 * np.pi * 120.0 * t)
-
-    res = adapter.process_space_time_security_analysis(dataset_name=dataset_name)
-    res['server'] = 'Leibnitz7'
-    return jsonify(res)
-
-@app.route('/api/security/live_threat_test', methods=['POST'])
-def live_threat_test():
-    """
-    Live Test of Use Case Endpoint for Leibnitz 7.0.
-    Fetches botnet capture telemetry (Stratosphere CTU-13, URLhaus, Certstream, CISA AIS),
-    preprocesses signal streams, feeds to 2D Space-Time transform, and returns labeled Fourier signatures.
-    """
-    data = request.get_json(force=True, silent=True) or {}
-    source_key = data.get('source', 'stratosphere_ctu13')
-    threat_type = data.get('threat_type', 'c2_beaconing')
-
-    from leibnitz6_server.threat_feeds import fetch_and_preprocess_threat_feed
-    from suganita_engine.signal_adapter import SignalAdapter
-    import numpy as np
-
-    feed_res = fetch_and_preprocess_threat_feed(source_key=source_key, threat_type=threat_type)
-
-    adapter = SignalAdapter()
-    for rack_id, signal_y in feed_res['telemetry_matrix'].items():
-        t = np.linspace(0, 10, len(signal_y), endpoint=False)
-        adapter.signals[rack_id] = {'t': t, 'y': signal_y, 'sr': 100, 'channel': rack_id}
-
-    analysis_res = adapter.process_space_time_security_analysis(dataset_name=f"{source_key}_{threat_type}")
-    analysis_res['server'] = 'Leibnitz7'
-    analysis_res['threat_source'] = feed_res['source_name']
-    analysis_res['source_description'] = feed_res['description']
-    analysis_res['attack_vector'] = threat_type
-    analysis_res['fourier_signatures'] = feed_res['fourier_signatures']
-
-    return jsonify(analysis_res)
-
-@app.route('/api/security/hybrid_threat_validation', methods=['POST'])
-def hybrid_threat_validation():
-    """
-    Hybrid Strategy Endpoint for Leibnitz 7.0:
-    - Sandboxed Ingestion: Air-gapped isolation stripping binary payloads.
-    - Labeled Benchmark Mode (CTU-13 / IoT-23): Computes Precision, Recall, F1-Score.
-    - Live Threat Hunting Mode (Certstream / URLhaus): Unsupervised 2D Fourier anomaly discovery.
-    """
-    data = request.get_json(force=True, silent=True) or {}
-    source_key = data.get('source', 'stratosphere_ctu13')
-    threat_type = data.get('threat_type', 'c2_beaconing')
-    validation_mode = data.get('mode', 'benchmark')
-
-    from leibnitz6_server.sandbox import TelemetrySandbox, HybridStrategyEngine
-    from leibnitz6_server.threat_feeds import fetch_and_preprocess_threat_feed
-    from suganita_engine.signal_adapter import SignalAdapter
-    import numpy as np
-
-    sandbox = TelemetrySandbox()
-    hybrid_engine = HybridStrategyEngine()
-
-    feed_res = fetch_and_preprocess_threat_feed(source_key=source_key, threat_type=threat_type)
-
-    adapter = SignalAdapter()
-    for rack_id, signal_y in feed_res['telemetry_matrix'].items():
-        t = np.linspace(0, 10, len(signal_y), endpoint=False)
-        adapter.signals[rack_id] = {'t': t, 'y': signal_y, 'sr': 100, 'channel': rack_id}
-
-    analysis_res = adapter.process_space_time_security_analysis(dataset_name=f"{source_key}_{threat_type}")
-    analysis_res['server'] = 'Leibnitz7'
-    analysis_res['sandbox_status'] = 'AIR_GAPPED_MEM_ISOLATION_ACTIVE'
-    analysis_res['validation_mode'] = validation_mode
-    analysis_res['threat_source'] = feed_res['source_name']
-    analysis_res['fourier_signatures'] = feed_res['fourier_signatures']
-
-    if validation_mode == 'benchmark':
-        ground_truth = ['Rack_Node_03', 'Rack_Node_07'] if threat_type == 'c2_beaconing' else ['Rack_Node_05', 'Rack_Node_09']
-        detected = analysis_res.get('suspicious_nodes', [])
-        metrics = hybrid_engine.evaluate_benchmark_accuracy(detected, ground_truth, total_nodes=10)
-        analysis_res['benchmark_metrics'] = metrics
-        analysis_res['benchmark_summary'] = f"F1-Score: {metrics['f1_score']}% | Precision: {metrics['precision']}% | Recall: {metrics['recall']}%"
-    else:
-        analysis_res['threat_hunting_summary'] = "Unsupervised 2D Space-Time Spectral Energy Scanning (Zero-Day Discovery)"
-
-    return jsonify(analysis_res)
 
 @app.route('/api/transmit', methods=['POST'])
 def transmit():
